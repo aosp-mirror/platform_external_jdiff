@@ -91,7 +91,7 @@ public class HTMLIndexes {
             h_.writeHTMLTitle(title);
             h_.writeStyleSheetRef();
             h_.writeText("</HEAD>");
-            h_.writeText("<BODY>");
+            h_.writeText("<BODY class=\"gc-documentation\" style=\"padding:12px;\">");
             
             if (programElementType.compareTo("Package") == 0) {
                 emitPackagesIndex(apiDiff, indexType);
@@ -145,7 +145,7 @@ public class HTMLIndexes {
                 // Don't emit a reference to the current letter
                 if (Character.toUpperCase(sw) != Character.toUpperCase(currChar)) {
                     if (swu == '_') {
-                        h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + "underscore" + "</font></a> ");
+                        h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + "_" + "</font></a> ");
                     } else {
                         h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + swu + "</font></a> ");
                     }
@@ -171,21 +171,21 @@ public class HTMLIndexes {
             isAllDiffs = true;
         }
         h_.writeText("<a NAME=\"topheader\"></a>"); // Named anchor
-        h_.writeText("<table summary=\"Index for " +  indexName + "\" width=\"100%\" class=\"index\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        h_.writeText("<table summary=\"Index for " +  indexName + "\" width=\"100%\" class=\"jdiffIndex\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"padding-bottom:0;margin-bottom:0;\">");
         h_.writeText("  <tr>");
         h_.writeText("  <th class=\"indexHeader\">");
         h_.writeText("    Filter the Index:");
         h_.writeText("  </th>");
         h_.writeText("  </tr>");
         h_.writeText("  <tr>");
-        h_.writeText("  <td class=\"indexText\" style=\"line-height:1.5em;padding-left:2em;\">");
+        h_.writeText("  <td class=\"indexText\" style=\"line-height:1.3em;padding-left:2em;\">");
 //        h_.writeText("  <div style=\"line-height:1.25em;padding-left:1em;>\">");
 //        h_.writeText("  <FONT SIZE=\"-1\">");
         // The index name is also a hidden link to the *index_all page
         if (indexType == 3) {
              h_.writeText("<b>" + indexName + "</b>"); }
         else if (isAllDiffs) {
-            h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" class=\"hiddenlink\">" + indexName + "</a>");
+            h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" xclass=\"hiddenlink\">" + indexName + "</a>");
         }
         else {
             h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" class=\"staysblack\">All " + indexName + "</a>");
@@ -198,7 +198,7 @@ public class HTMLIndexes {
           if (indexType == 0) {
             h_.writeText("<b>Removals</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_removals" + h_.reportFileExt + "\" class=\"hiddenlink\">Removals</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_removals" + h_.reportFileExt + "\" xclass=\"hiddenlink\">Removals</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Removals</font>");
@@ -211,7 +211,7 @@ public class HTMLIndexes {
           if (indexType == 1) {
             h_.writeText("<b>Additions</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_additions" + h_.reportFileExt + "\"class=\"hiddenlink\">Additions</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_additions" + h_.reportFileExt + "\"xclass=\"hiddenlink\">Additions</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Additions</font>");
@@ -224,7 +224,7 @@ public class HTMLIndexes {
           if (indexType == 2) {
             h_.writeText("<b>Changes</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_changes" + h_.reportFileExt + "\"class=\"hiddenlink\">Changes</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_changes" + h_.reportFileExt + "\"xclass=\"hiddenlink\">Changes</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Changes</font>");
@@ -234,8 +234,10 @@ public class HTMLIndexes {
         h_.writeText("  </td>");
         h_.writeText("  </tr>");
         h_.writeText("</table>");
-        h_.writeText("<font size=\"-2\"><strong>Bold</strong>&nbsp;indicates&nbsp;New;&nbsp;<strike>Strike</strike>&nbsp;indicates&nbsp;deleted</font>");
-        h_.writeText("  </br>");
+        h_.writeText("<div id=\"indexTableCaption\" style=\"background-color:#eee;padding:0 4px 0 4px;font-size:11px;margin-bottom:1em;\">");
+//        h_.writeText("<font size=\"-2\"><strong>Bold</strong>&nbsp;indicates&nbsp;New;&nbsp;<strike>Strike</strike> indicates deleted. Plain indicates changed.</font>");
+        h_.writeText("Listed as: <span style=\"color:#069\"><strong>Added</strong></span>,  <span style=\"color:#069\"><strike>Removed</strike></span>,  <span style=\"color:#069\">Changed</span></font>");
+        h_.writeText("</div>");
 
     }
 
@@ -281,6 +283,7 @@ public class HTMLIndexes {
         // Package names are unique, so no need to check for duplicates.
         iter = packageNames.iterator();
         char oldsw = '\0';
+        h_.writeText("<div id=\"indexTableEntries\">");
         while (iter.hasNext()) {
             Index pkg = (Index)(iter.next());
             oldsw = emitPackageIndexEntry(pkg, oldsw);
@@ -497,7 +500,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(classNames, sw, false);
@@ -561,19 +564,34 @@ public class HTMLIndexes {
                 Iterator iterCtor = classDiff.ctorsRemoved.iterator();
                 while ((indexType == 3 || indexType == 0) && iterCtor.hasNext()) {
                     ConstructorAPI ctor = (ConstructorAPI)(iterCtor.next());
-                    ctorNames.add(new Index(className, 0, pkgName, ctor.type_));
+                    ctorNames.add(new Index(className, 0, pkgName, ctor.getSignature()));
+/*dbd                System.out.println("+++++++++++ 3 || 0" );
+                System.out.println("For Constructor: " + className );
+                System.out.println("    The type is: " + ctor.type_ );
+                System.out.println("    The sig is: " + ctor.getSignature()); 
+*/
                 }
                 iterCtor = classDiff.ctorsAdded.iterator();
                 while ((indexType == 3 || indexType == 1) && iterCtor.hasNext()) {
                     ConstructorAPI ctor = (ConstructorAPI)(iterCtor.next());
-                    Index idx = new Index(className, 1, pkgName, ctor.type_);
+                    Index idx = new Index(className, 1, pkgName, ctor.getSignature());
                     idx.doc_ = ctor.doc_; // Used for checking @since
                     ctorNames.add(idx);
+/*dbd
+                System.out.println("+++++++++++ 3 || 1" );
+                System.out.println("For Constructor: " + className );
+                System.out.println("    The type is: " + ctor.type_ );
+                System.out.println("    The sig is: " + ctor.getSignature());
+*/
                 }
                 iterCtor = classDiff.ctorsChanged.iterator();
                 while ((indexType == 3 || indexType == 2) && iterCtor.hasNext()) {
                     MemberDiff ctor = (MemberDiff)(iterCtor.next());
                     ctorNames.add(new Index(className, 2, pkgName, ctor.newType_));
+/*dbd
+                System.out.println("+++++++++++ 3 || 2" );
+                System.out.println("For Constructor: " + ctor.newType_ );
+*/
                 }
             }
         }
@@ -600,7 +618,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(ctorNames, sw, false);
@@ -700,7 +718,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(methNames, sw, false);
@@ -816,7 +834,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(fieldNames, sw, false);
@@ -827,7 +845,7 @@ public class HTMLIndexes {
         }
         if (multipleMarker != 0) {
 // More context than this is helpful here: h_.indent(INDENT_SIZE);
-            h_.writeText("&nbsp;in&nbsp;");
+            h_.writeText("<nobr>&nbsp;in&nbsp;");
         }
         // Deal with each type of difference
         if (fld.changeType_ == 0) {
@@ -836,7 +854,7 @@ public class HTMLIndexes {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + fld.name_ + "</strike></A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + className + "</strike></A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + className + "</strike></A>");
                 h_.writeText("</nobr><br>");
             }
         } else if (fld.changeType_ == 1) {
@@ -845,7 +863,7 @@ public class HTMLIndexes {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + fld.name_ + "</A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
                 h_.writeText("</nobr><br>");
             }
         } else if (fld.changeType_ == 2) {
@@ -854,7 +872,7 @@ public class HTMLIndexes {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + fld.name_ + "</A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
                 h_.writeText("</nobr><br>");
             }
         }

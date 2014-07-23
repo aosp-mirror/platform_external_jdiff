@@ -306,10 +306,10 @@ public class APIComparator {
             differsFlag = true;
         
         if (trace) {
-            System.out.println("  Ctors differ? " + differsCtors + 
+            System.out.println( newClass.name_ + "  Ctors differ? " + differsCtors + 
                 ", Methods differ? " + differsMethods + 
                 ", Fields differ? " + differsFields);
-        }
+       }
 
         // Only add to the parent if some difference has been found
         if (differsFlag) 
@@ -345,8 +345,8 @@ public class APIComparator {
          if (differsFlag && differs == 0.0) {
              differs = 1.0;
          }
-         if (trace)
-             System.out.println("  Class " + classDiff.name_ + " had a difference of " + differs + "/" + denom.intValue());
+        if (trace)
+             System.out.println(pkgDiff.name_ + "  Class " + classDiff.name_ + " had a difference of " + differs + "/" + denom.intValue());
          classDiff.pdiff = 100.0 * differs/denom.doubleValue();
          return differs/denom.doubleValue();
     } // compareClasses()
@@ -354,7 +354,7 @@ public class APIComparator {
     /** 
      * Compare all the constructors in two classes. 
      *
-     * The compareTo method in the ConstructorAPI class acts only upon the type.
+     * The compareTo method in the ConstructorAPI class acts only upon the type. (dd --not so...)
      */
     public boolean compareAllCtors(ClassAPI oldClass, ClassAPI newClass, 
                                    ClassDiff classDiff) {
@@ -371,7 +371,20 @@ public class APIComparator {
         Iterator iter = oldClass.ctors_.iterator();
         while (iter.hasNext()) {
             ConstructorAPI oldCtor = (ConstructorAPI)(iter.next());
-            int idx = Collections.binarySearch(newClass.ctors_, oldCtor);
+            int idx = -1;
+            ConstructorAPI[] ctorArr = new ConstructorAPI[newClass.ctors_.size()];
+            ctorArr = (ConstructorAPI[])newClass.ctors_.toArray(ctorArr);
+            for (int ctorIdx = 0; ctorIdx < ctorArr.length; ctorIdx++) {
+                ConstructorAPI newCtor = ctorArr[ctorIdx];
+                if (oldCtor.compareTo(newCtor) == 0) {
+                    idx  = ctorIdx;
+                    break; 	
+                } 
+            }
+
+
+// android: try getting rid of this and use arrays
+            // int idx = Collections.binarySearch(newClass.ctors_, oldCtor);
             if (idx < 0) {
                 int oldSize = oldClass.ctors_.size();
                 int newSize = newClass.ctors_.size();
@@ -379,10 +392,13 @@ public class APIComparator {
                     // If there is one constructor in the oldClass and one
                     // constructor in the new class, then mark it as changed
                     MemberDiff memberDiff = new MemberDiff(oldClass.name_);
-                    memberDiff.oldType_ = oldCtor.type_;
+//                    memberDiff.oldType_ = oldCtor.type_;
+                    memberDiff.oldType_ = oldCtor.getSignature();
+//android:          System.out.println("--------------------------APIComparator: " + oldClass.name_ + "." + memberDiff.oldType_);
                     memberDiff.oldExceptions_ = oldCtor.exceptions_;
                     ConstructorAPI newCtor  = (ConstructorAPI)(newClass.ctors_.get(0));
-                    memberDiff.newType_ = newCtor.type_;
+                    memberDiff.newType_ = newCtor.getSignature();
+//android:          System.out.println("--------------------------APIComparator: " + oldClass.name_ + "." + memberDiff.newType_);
                     memberDiff.newExceptions_ = newCtor.exceptions_;
                     // Track changes in documentation
                     if (docChanged(oldCtor.doc_, newCtor.doc_)) {
@@ -397,19 +413,17 @@ public class APIComparator {
                             "</b></a>, " + link2 + "constructor <b>" + classDiff.name_ + "(" + HTMLReportGenerator.simpleName(type) + ")</b></a>";
                         memberDiff.documentationChange_ = Diff.saveDocDiffs(
                             pkgDiff.name_, classDiff.name_, oldCtor.doc_, newCtor.doc_, id, title);
-                    }
+                    } 
                     String modifiersChange = oldCtor.modifiers_.diff(newCtor.modifiers_);
                     if (modifiersChange != null && modifiersChange.indexOf("Change from deprecated to undeprecated") != -1) {
                         System.out.println("JDiff: warning: change from deprecated to undeprecated for a constructor in class" + newClass.name_);
                     }
                     memberDiff.addModifiersChange(modifiersChange);
-                    if (trace)
-                        System.out.println("    The single constructor was changed");
+                    //if (classDiff.name_.indexOf("Date") != -1)
+                        //System.out.println("    The single constructor was changed");
                     classDiff.ctorsChanged.add(memberDiff);
                     singleCtor = true;
                 } else {
-                    if (trace)
-                        System.out.println("    Constructor " + oldClass.name_ + " was removed");
                     classDiff.ctorsRemoved.add(oldCtor);
                 }
                 differs = true;
@@ -420,7 +434,18 @@ public class APIComparator {
         iter = newClass.ctors_.iterator();
         while (iter.hasNext()) {
             ConstructorAPI newCtor = (ConstructorAPI)(iter.next());
-            int idx = Collections.binarySearch(oldClass.ctors_, newCtor);
+            int idx = -1;
+            ConstructorAPI[] ctorArr = new ConstructorAPI[oldClass.ctors_.size()];
+            ctorArr = (ConstructorAPI[])oldClass.ctors_.toArray(ctorArr);
+            for (int ctorIdx = 0; ctorIdx < ctorArr.length; ctorIdx++) {
+                ConstructorAPI oldCtor = ctorArr[ctorIdx];
+                if (newCtor.compareTo(oldCtor) == 0) {
+                    idx  = ctorIdx;
+                    break; 	
+                } 
+            }
+//dd remove binary search and use arrays, it gets confused
+            //int idx = Collections.binarySearch(oldClass.ctors_, newCtor);
             if (idx < 0) {
                 if (!singleCtor) {
                     if (trace)
@@ -526,22 +551,52 @@ public class APIComparator {
             methodArr = (MethodAPI[])oldClass.methods_.toArray(methodArr);
             for (int methodIdx = 0; methodIdx < methodArr.length; methodIdx++) {
                 MethodAPI oldMethod = methodArr[methodIdx];
+                /* android
+		if (newMethod.name_.indexOf("forkS") != -1) {
+
+                    System.out.println("=== oldMethod array[ " + methodIdx + "]" + oldMethod.name_ + 
+                                           "(" + oldMethod.getSignature() + ")");
+                }
+                */
                 if (newMethod.compareTo(oldMethod) == 0) {
+                /* android
+		if (newMethod.name_.indexOf("forkS") != -1) {
+
+                    System.out.println("compareTo found a match between" + newMethod.name_ + 
+                                           "(" + newMethod.getSignature() + ") at oldindex " + methodIdx + ": " + oldMethod.name_ + "(" + oldMethod.getSignature() + ")");
+                }
+                */
                     idx  = methodIdx;
                     break;
                 }
+            }
+
+            int nidx = -1;
+            MethodAPI[] nmethodArr = new MethodAPI[newClass.methods_.size()];
+            nmethodArr = (MethodAPI[])newClass.methods_.toArray(methodArr);
+	    for (int methodIdx = 0; methodIdx < methodArr.length; methodIdx++) {
+                MethodAPI nMethod = nmethodArr[methodIdx];
             }
 // See note above about searching an array instead of binarySearch
 //            int idx = Collections.binarySearch(oldClass.methods_, newMethod);
             if (idx < 0) {
                 // See comments above
+
                 int startOld = oldClass.methods_.indexOf(newMethod); 
                 int endOld = oldClass.methods_.lastIndexOf(newMethod);
                 int startNew = newClass.methods_.indexOf(newMethod); 
                 int endNew = newClass.methods_.lastIndexOf(newMethod);
-
+                /* android
+                if (newMethod.name_.indexOf("fork") != -1) {
+                System.out.println("++++Method " + newMethod.name_ + 
+                                           "(" + newMethod.getSignature() + ") is at index " + startNew + " and ends at " + endNew);
+                }
+                */
                 if (startOld != -1 && startOld == endOld && 
                     startNew != -1 && startNew == endNew) {
+                    if (trace)
+                        System.out.println("    Method " + newMethod.name_ + 
+                                           "(" + newMethod.getSignature() + ") SHOULD BE REMOVED FROM ADDED LIST");
                     // Don't mark a method as added if it was marked as changed
                     // The comparison will have been done just above here.
                 } else {
@@ -872,7 +927,7 @@ public class APIComparator {
     public static String linkToClass(String className, String memberName, 
                                      String memberType, boolean useNew) {
         if (!useNew && HTMLReportGenerator.oldDocPrefix == null) {
-            return "<tt>" + className + "</tt>"; // No link possible
+            return "<code>" + className + "</code>"; // No link possible
         }
         API api = oldAPI_;
         String prefix = HTMLReportGenerator.oldDocPrefix;
@@ -886,7 +941,7 @@ public class APIComparator {
                 System.out.println("Warning: class " + className + " not found in the new API when creating Javadoc link");
             else
                 System.out.println("Warning: class " + className + " not found in the old API when creating Javadoc link");
-            return "<tt>" + className + "</tt>";
+            return "<code>" + className + "</code>";
         }
         int clsIdx = className.indexOf(cls.name_);
         if (clsIdx != -1) {
@@ -895,10 +950,10 @@ public class APIComparator {
             String res = "<a href=\"" + prefix + pkgRef + cls.name_ + ".html#" + memberName;
             if (memberType != null)
                 res += "(" + memberType + ")";
-            res += "\" target=\"_top\">" + "<tt>" + cls.name_ + "</tt></a>";
+            res += "\" target=\"_top\">" + "<code>" + cls.name_ + "</code></a>";
             return res;
         }
-        return "<tt>" + className + "</tt>";
+        return "<code>" + className + "</code>";
     }    
 
     /** 

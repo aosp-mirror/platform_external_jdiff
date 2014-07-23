@@ -10,6 +10,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.*;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Creates an API object from an XML file. The API object is the internal 
@@ -47,19 +48,17 @@ public class XMLToAPI {
             XMLReader parser = null;
             DefaultHandler handler = new APIHandler(api_, createGlobalComments);
             try {
-                String parserName = System.getProperty("org.xml.sax.driver");
-                if (parserName == null) {
-                    parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
-                } else {
-                    // Let the underlying mechanisms try to work out which 
-                    // class to instantiate
-                    parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-                }
+                parser = javax.xml.parsers.SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             } catch (SAXException saxe) {
                 System.out.println("SAXException: " + saxe);
                 saxe.printStackTrace();
                 System.exit(1);
+            } catch (ParserConfigurationException pce) {
+                System.out.println("ParserConfigurationException: " + pce);
+                pce.printStackTrace();
+                System.exit(1);
             }
+
             if (validateXML) {
                 parser.setFeature("http://xml.org/sax/features/namespaces", true);
                 parser.setFeature("http://xml.org/sax/features/validation", true);
@@ -193,26 +192,32 @@ public class XMLToAPI {
 // Methods to add data to an API object. Called by the XML parser.
 //
 
+
+
     /** 
      * Set the name of the API object.
      *
      * @param name The name of the package.
-     */
+    */
     public static void nameAPI(String name) {
-        if (name == null) {
-            System.out.println("Error: no API identifier found in the XML file '" + api_.name_ + "'");
-            System.exit(3);
-        }
+        // dbd for android, we don't want a check between api attribute and filename.
+        //
+        //if (name == null) {
+        //    System.out.println("Error: no API identifier found in the XML file '" + api_.name_ + "'");
+        //    System.exit(3);
+        //}
         // Check the given name against the filename currently stored in 
         // the name_ field
-        String filename2 = name.replace(' ','_');
-        filename2 += ".xml";
-        if (filename2.compareTo(api_.name_) != 0) {
-            System.out.println("Warning: API identifier in the XML file (" + 
-                               name + ") differs from the name of the file '" +
-                               api_.name_ + "'");
-        }
-        api_.name_ = name;
+       //String filename2 = name.replace(' ','_');
+       //filename2 += ".xml";
+        //if (filename2.compareTo(api_.name_) != 0) {
+         //   System.out.println("Warning: API identifier in the XML file (" + 
+        //                       name + ") differs from the name of the file '" +
+        //                       api_.name_ + "'");
+        //}
+       String filename = api_.name_.substring(0, api_.name_.lastIndexOf(".xml"));
+       System.out.println(" api level:" + filename);
+       api_.name_ = filename;
     }
    
     /** 
@@ -276,11 +281,12 @@ public class XMLToAPI {
      * @param type The type of the constructor.
      * @param modifiers Modifiers for this constructor.
      */
-    public static void addCtor(String type, Modifiers modifiers) {
+    public static void addCtor(String name, String type, Modifiers modifiers) {
+        String n = name;
         String t = type;
         if (t == null)
             t = "void";
-        api_.currCtor_ = new ConstructorAPI(t, modifiers);
+        api_.currCtor_ = new ConstructorAPI(n, t, modifiers);
         api_.currClass_.ctors_.add(api_.currCtor_);
     }
 
@@ -319,19 +325,25 @@ public class XMLToAPI {
     }
 
     /** 
-     * Add a parameter to the current method. Called by the XML parser.
+     * Add a parameter to the current method (or constructor dbd). Called by the XML parser.
      * Constuctors have their type (signature) in an attribute, since it 
      * is often shorter and makes parsing a little easier.
      *
      * @param name The name of the parameter.
      * @param type The type of the parameter, null if it is void.
      */
-    public static void addParam(String name, String type) {
+    public static void addParam(String name, String type, String currElement) {
         String t = type;
         if (t == null)
             t = "void";
         ParamAPI paramAPI = new ParamAPI(name, t);
-        api_.currMethod_.params_.add(paramAPI);
+        if (currElement.compareTo("method") == 0) {
+             api_.currMethod_.params_.add(paramAPI);
+        } else {
+//dbd   System.out.println("DDDDDDD: " + api_.currCtor_.name_ + ": " + name + "," + type);
+        api_.currCtor_.params_.add(paramAPI);
+        }
+
     }
 
     /** 

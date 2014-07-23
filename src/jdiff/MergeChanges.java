@@ -48,7 +48,9 @@ class MergeChanges {
                 ctorArr = (ConstructorAPI[])classDiff.ctorsRemoved.toArray(ctorArr);
                 for (int ctorIdx = 0; ctorIdx < ctorArr.length; ctorIdx++) {
                     ConstructorAPI removedCtor = ctorArr[ctorIdx];
+//dbd   System.out.println("DDDDDDD: " + removedCtor.type_ );
                     mergeRemoveAddCtor(removedCtor, classDiff, pkgDiff);
+
                 }
                 // Methods
                 MethodAPI[] methodArr = new MethodAPI[classDiff.methodsRemoved.size()];
@@ -88,8 +90,8 @@ class MergeChanges {
             ConstructorAPI addedCtor = (ConstructorAPI)(classDiff.ctorsAdded.get(startAdded));
             // Create a MemberDiff for this change
             MemberDiff ctorDiff = new MemberDiff(classDiff.name_);
-            ctorDiff.oldType_ = removedCtor.type_;
-            ctorDiff.newType_ = addedCtor.type_; // Should be the same as removedCtor.type
+            ctorDiff.oldType_ = removedCtor.getSignature();
+            ctorDiff.newType_ = addedCtor.getSignature(); // Should be the same as removedCtor.type
             ctorDiff.oldExceptions_ = removedCtor.exceptions_;
             ctorDiff.newExceptions_ = addedCtor.exceptions_;
             ctorDiff.addModifiersChange(removedCtor.modifiers_.diff(addedCtor.modifiers_));
@@ -168,13 +170,15 @@ class MergeChanges {
                 }
                 classDiff.methodsChanged.add(methodDiff);
                 // Now remove the entries from the remove and add lists
+                //System.out.println("CHANGE MATCH: removing removed class " + methodDiff.name_ + "(" + methodDiff.oldSignature_ + ")");
                 classDiff.methodsRemoved.remove(startRemoved);
+                //System.out.println("CHANGE MATCH: removing added class " + methodDiff.name_ + "(" + methodDiff.newSignature_ + ")");
                 classDiff.methodsAdded.remove(startAdded);
                 if (trace) {
                     System.out.println("Merged the removal and addition of method " + 
                                        removedMethod.name_ + 
                                        " into one change");
-                }
+               }
             } //if (addedMethod.inheritedFrom_ == null)
         }
     }
@@ -194,7 +198,7 @@ class MergeChanges {
             startAdded != -1 && endAdded != -1) {
             // Find the index of the current removed method
             int removedIdx = -1;
-            for (int i = startRemoved; i <= endRemoved; i++) {                
+            for (int i = startRemoved; i <= endRemoved; i++) {
                 if (removedMethod.equalSignatures(classDiff.methodsRemoved.get(i))) {
                     removedIdx = i;
                     break;
@@ -211,6 +215,7 @@ class MergeChanges {
                 MethodAPI addedMethod2 = (MethodAPI)(classDiff.methodsAdded.get(i));
                 if (addedMethod2.inheritedFrom_ == null &&
                     removedMethod.equalSignatures(addedMethod2))
+                    //System.out.println("}}}}}}}}     }}}}}}}Equal Sigs: " + addedMethod2.signature_ + " and " + removedMethod.signature_);
                     addedIdx = i;
                     break;
             }
