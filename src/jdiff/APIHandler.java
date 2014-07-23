@@ -103,8 +103,9 @@ class APIHandler extends DefaultHandler {
             XMLToAPI.addImplements(interfaceName);
         } else if (localName.compareTo("constructor") == 0) {
             currentElement = localName;
+            String ctorName = attributes.getValue("name");
             String ctorType = attributes.getValue("type");
-            XMLToAPI.addCtor(ctorType, getModifiers(attributes));
+            XMLToAPI.addCtor(ctorName, ctorType, getModifiers(attributes));
         } else if (localName.compareTo("method") == 0) {
             currentElement = localName;
             String methodName = attributes.getValue("name");
@@ -133,10 +134,10 @@ class APIHandler extends DefaultHandler {
             String value = attributes.getValue("value");
             XMLToAPI.addField(fieldName, fieldType, isTransient, isVolatile, 
                               value, getModifiers(attributes));
-        } else if (localName.compareTo("param") == 0) {
+        } else if (localName.compareTo("parameter") == 0) {
             String paramName = attributes.getValue("name");
             String paramType = attributes.getValue("type");
-            XMLToAPI.addParam(paramName, paramType);
+            XMLToAPI.addParam(paramName, paramType, currentElement);
         } else if (localName.compareTo("exception") == 0) {
             String paramName = attributes.getValue("name");
             String paramType = attributes.getValue("type");

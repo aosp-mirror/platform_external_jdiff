@@ -439,5 +439,6 @@ public class Options {
     public static String cmdOptions = "";
 
     /** Set to enable increased logging verbosity for debugging. */
-    private static boolean trace = false;
+// dbd
+    private static boolean trace = true;
 }

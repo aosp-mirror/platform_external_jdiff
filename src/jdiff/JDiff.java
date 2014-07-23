@@ -288,7 +288,7 @@ public class JDiff extends Doclet {
     /** The current JDiff version. */
     static final String version = "1.1.0";
 
-    /** The current virtual machine version. */
+    /** The current JVM version. */
     static String javaVersion = System.getProperty("java.version");
 
     /** Set to enable increased logging verbosity for debugging. */

@@ -107,6 +107,12 @@ class MethodAPI implements Comparable {
         comp = exceptions_.compareTo(oMethod.exceptions_);
         if (comp != 0)
             return comp;
+        /* android
+        if (name_.indexOf("fork") != -1) {
+	
+			System.out.println(this + "        | MethodAPI.compareTo: Compare " + name_ + "(" + getSignature() + ") (" + modifiers_.isDeprecated + ") (" + oMethod.modifiers_.isDeprecated);
+                }
+        */
         comp = modifiers_.compareTo(oMethod.modifiers_);
         if (comp != 0)
             return comp;
