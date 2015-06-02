@@ -4,7 +4,6 @@
 <description>
 Builds Android's jdiff.jar and places it in device/extlibs/jdiff-1.1.0/. 
 </description>
-	 
 
 <target name="init" description="Properties used by other targets">
   <property name="extlibs.dir" value="${basedir}/../../extlibs/jdiff-1.1.0/" />
@@ -13,9 +12,6 @@ Builds Android's jdiff.jar and places it in device/extlibs/jdiff-1.1.0/.
   <property name="classes.dir" value="${build.dir}/classes" />
   <property name="lib.dir" value="${build.dir}/lib" />
   <property name="version" value="1.1.0" />
-  <path id="class.path">
-    <pathelement location="{basedir}/../../extlibs/xerces.jar" />
-  </path>
   <property name="debug" value="true" />
   <property name="JDIFF_HOME" value="${extlibs.dir}" />
 </target>
@@ -39,17 +35,15 @@ Builds Android's jdiff.jar and places it in device/extlibs/jdiff-1.1.0/.
          destdir="${classes.dir}"
          debug="${debug}"
          excludes="jdiff/JDiffAntTask.java"
-         includeJavaRuntime="yes">
-    <classpath>
-      <path refid="class.path" />
-    </classpath>
-<!--<compilerarg value="-Xlint:unchecked"/>   -->
+         fork="true"
+         includeJavaRuntime="false"
+         includeAntRuntime="yes">
   </javac>
-</target>	
+</target>
 
 <!-- Place the jdiff.jar file in <branch-root>/device/extlibs/jdiff-.1.0/ (under version control) -->
-	<target name="jar" depends="compile">
-  <jar jarfile="${basedir}/jdiff.jar" 
+<target name="jar" depends="compile">
+  <jar jarfile="${basedir}/jdiff.jar"
        basedir="${classes.dir}"
        includes="*jdiff/*.class"
        excludes="*jdiff/JDiffAntTask*.class" />
