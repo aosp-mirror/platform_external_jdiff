@@ -2,6 +2,7 @@ package jdiff;
 
 import java.io.*;
 import java.util.*;
+import javax.xml.parsers.ParserConfigurationException;
 
 /* For SAX XML parsing */
 import org.xml.sax.Attributes;
@@ -60,17 +61,14 @@ public class Comments {
             DefaultHandler handler = new CommentsHandler(oldComments_);
             XMLReader parser = null;
             try {
-                String parserName = System.getProperty("org.xml.sax.driver");
-                if (parserName == null) {
-                    parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
-                } else {
-                    // Let the underlying mechanisms try to work out which 
-                    // class to instantiate
-                    parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-                }
+                parser = javax.xml.parsers.SAXParserFactory.newInstance().newSAXParser().getXMLReader();
             } catch (SAXException saxe) {
                 System.out.println("SAXException: " + saxe);
                 saxe.printStackTrace();
+                System.exit(1);
+            } catch (ParserConfigurationException pce) {
+                System.out.println("ParserConfigurationException: " + pce);
+                pce.printStackTrace();
                 System.exit(1);
             }
 
