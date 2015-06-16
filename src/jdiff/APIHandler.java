@@ -26,12 +26,12 @@ class APIHandler extends DefaultHandler {
         api_ = api;
         createGlobalComments_ = createGlobalComments;
         tagStack = new LinkedList();
-    }   
+    }
 
     /** If set, then check that each comment is a sentence. */
     public static boolean checkIsSentence = false;
 
-    /** 
+    /**
      * Contains the name of the current package element type
      * where documentation is being added. Also used as the level
      * at which to add documentation into an element, i.e. class-level
@@ -51,16 +51,16 @@ class APIHandler extends DefaultHandler {
     /** The current text from deprecation, null if empty. */
     private String currentDepText = null;
 
-    /** 
-     * The stack of SingleComment objects awaiting the comment text 
-     * currently being assembled. 
+    /**
+     * The stack of SingleComment objects awaiting the comment text
+     * currently being assembled.
      */
     private LinkedList tagStack = null;
 
     /** Called at the start of the document. */
     public void startDocument() {
     }
-    
+
     /** Called when the end of the document is reached. */
     public void endDocument() {
         if (trace)
@@ -103,8 +103,9 @@ class APIHandler extends DefaultHandler {
             XMLToAPI.addImplements(interfaceName);
         } else if (localName.compareTo("constructor") == 0) {
             currentElement = localName;
+            String ctorName = attributes.getValue("name");
             String ctorType = attributes.getValue("type");
-            XMLToAPI.addCtor(ctorType, getModifiers(attributes));
+            XMLToAPI.addCtor(ctorName, ctorType, getModifiers(attributes));
         } else if (localName.compareTo("method") == 0) {
             currentElement = localName;
             String methodName = attributes.getValue("name");
@@ -118,7 +119,7 @@ class APIHandler extends DefaultHandler {
             boolean isSynchronized = false;
             if (attributes.getValue("synchronized").compareTo("true") == 0)
                 isSynchronized = true;
-            XMLToAPI.addMethod(methodName, returnType, isAbstract, isNative, 
+            XMLToAPI.addMethod(methodName, returnType, isAbstract, isNative,
                                isSynchronized, getModifiers(attributes));
         } else if (localName.compareTo("field") == 0) {
             currentElement = localName;
@@ -131,12 +132,12 @@ class APIHandler extends DefaultHandler {
             if (attributes.getValue("volatile").compareTo("true") == 0)
                 isVolatile = true;
             String value = attributes.getValue("value");
-            XMLToAPI.addField(fieldName, fieldType, isTransient, isVolatile, 
+            XMLToAPI.addField(fieldName, fieldType, isTransient, isVolatile,
                               value, getModifiers(attributes));
-        } else if (localName.compareTo("param") == 0) {
+        } else if (localName.compareTo("param") == 0 || localName.compareTo("parameter") == 0) {
             String paramName = attributes.getValue("name");
             String paramType = attributes.getValue("type");
-            XMLToAPI.addParam(paramName, paramType);
+            XMLToAPI.addParam(paramName, paramType, currentElement.compareTo("constructor") == 0);
         } else if (localName.compareTo("exception") == 0) {
             String paramName = attributes.getValue("name");
             String paramType = attributes.getValue("type");
@@ -154,12 +155,12 @@ class APIHandler extends DefaultHandler {
             }
         }
     }
-    
+
     /** Called when the end of an element is reached. */
-    public void endElement(java.lang.String uri, java.lang.String localName, 
+    public void endElement(java.lang.String uri, java.lang.String localName,
                            java.lang.String qName) {
-	if (localName.equals(""))
-	    localName = qName;
+        if (localName.equals(""))
+            localName = qName;
         // Deal with the end of doc blocks
         if (localName.compareTo("doc") == 0) {
             inDoc = false;
@@ -169,22 +170,22 @@ class APIHandler extends DefaultHandler {
         } else if (inDoc) {
             // An element was found inside the HTML text
             addEndTagToText(localName);
-        } else if (currentElement.compareTo("constructor") == 0 && 
+        } else if (currentElement.compareTo("constructor") == 0 &&
                    localName.compareTo("constructor") == 0) {
             currentElement = "class";
-        } else if (currentElement.compareTo("method") == 0 && 
+        } else if (currentElement.compareTo("method") == 0 &&
                    localName.compareTo("method") == 0) {
             currentElement = "class";
-        } else if (currentElement.compareTo("field") == 0 && 
+        } else if (currentElement.compareTo("field") == 0 &&
                    localName.compareTo("field") == 0) {
             currentElement = "class";
         } else if (currentElement.compareTo("class") == 0 ||
                    currentElement.compareTo("interface") == 0) {
             // Feature request 510307 and bug 517383: duplicate comment ids.
-            // The end of a member element leaves the currentElement at the 
+            // The end of a member element leaves the currentElement at the
             // "class" level, but the next class may in fact be an interface
             // and so the currentElement here will be "interface".
-            if (localName.compareTo("class") == 0 || 
+            if (localName.compareTo("class") == 0 ||
                 localName.compareTo("interface") == 0) {
                 currentElement = "package";
             }
@@ -202,24 +203,24 @@ class APIHandler extends DefaultHandler {
          }
     }
 
-    /** 
+    /**
      * Trim the current text, check it is a sentence and add it to the
-     * current program element. 
+     * current program element.
      */
     public void addTextToComments() {
         // Eliminate any whitespace at each end of the text.
-        currentText = currentText.trim();        
+        currentText = currentText.trim();
         // Convert any @link tags to HTML links.
         if (convertAtLinks) {
-            currentText = Comments.convertAtLinks(currentText, currentElement, 
+            currentText = Comments.convertAtLinks(currentText, currentElement,
                                                   api_.currPkg_, api_.currClass_);
         }
         // Check that it is a sentence
-        if (checkIsSentence && !currentText.endsWith(".") && 
+        if (checkIsSentence && !currentText.endsWith(".") &&
             currentText.compareTo(Comments.placeHolderText) != 0) {
             System.out.println("Warning: text of comment does not end in a period: " + currentText);
         }
-        // The construction of the commentID assumes that the 
+        // The construction of the commentID assumes that the
         // documentation is the final element to be parsed. The format matches
         // the format used in the report generator to look up comments in the
         // the existingComments object.
@@ -236,25 +237,25 @@ class APIHandler extends DefaultHandler {
             api_.currCtor_.doc_ = currentText;
             commentID = api_.currPkg_.name_ + "." + api_.currClass_.name_ +
                 ".ctor_changed(";
-            if (api_.currCtor_.type_.compareTo("void") == 0)
+            if (api_.currCtor_.getSignature().compareTo("void") == 0)
                 commentID = commentID + ")";
             else
-                commentID = commentID + api_.currCtor_.type_ + ")";
+                commentID = commentID + api_.currCtor_.getSignature() + ")";
         } else if (currentElement.compareTo("method") == 0) {
             api_.currMethod_.doc_ = currentText;
             commentID = api_.currPkg_.name_ + "." + api_.currClass_.name_ +
-                "." + api_.currMethod_.name_ + "_changed(" + 
+                "." + api_.currMethod_.name_ + "_changed(" +
                 api_.currMethod_.getSignature() + ")";
         } else if (currentElement.compareTo("field") == 0) {
             api_.currField_.doc_ = currentText;
             commentID = api_.currPkg_.name_ + "." + api_.currClass_.name_ +
                 "." + api_.currField_.name_;
-        }            
+        }
         // Add to the list of possible comments for use when an
         // element has changed (not removed or added).
         if (createGlobalComments_ && commentID != null) {
             String ct = currentText;
-            // Use any deprecation text as the possible comment, ignoring 
+            // Use any deprecation text as the possible comment, ignoring
             // any other comment text.
             if (currentDepText != null) {
                 ct = currentDepText;
@@ -268,8 +269,8 @@ class APIHandler extends DefaultHandler {
         }
     }
 
-    /** 
-     * Add the start tag to the current comment text. 
+    /**
+     * Add the start tag to the current comment text.
      */
     public void addStartTagToText(String localName, Attributes attributes) {
         // Need to insert the HTML tag into the current text
@@ -298,8 +299,8 @@ class APIHandler extends DefaultHandler {
             currentText += tag;
     }
 
-    /** 
-     * Add the end tag to the current comment text. 
+    /**
+     * Add the end tag to the current comment text.
      */
     public void addEndTagToText(String localName) {
         // Close the current HTML tag
@@ -343,15 +344,15 @@ class APIHandler extends DefaultHandler {
         e.printStackTrace();
         System.exit(1);
     }
-    
+
     public void fatalError(SAXParseException e) {
         System.out.println("Fatal Error (" + e.getLineNumber() + "): parsing XML API file:" + e);
         e.printStackTrace();
         System.exit(1);
-    }    
+    }
 
-    /** 
-     * If set, then attempt to convert @link tags to HTML links. 
+    /**
+     * If set, then attempt to convert @link tags to HTML links.
      * A few of the HTML links may be broken links.
      */
     private static boolean convertAtLinks = true;
