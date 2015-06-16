@@ -561,12 +561,12 @@ public class HTMLIndexes {
                 Iterator iterCtor = classDiff.ctorsRemoved.iterator();
                 while ((indexType == 3 || indexType == 0) && iterCtor.hasNext()) {
                     ConstructorAPI ctor = (ConstructorAPI)(iterCtor.next());
-                    ctorNames.add(new Index(className, 0, pkgName, ctor.type_));
+                    ctorNames.add(new Index(className, 0, pkgName, ctor.getSignature()));
                 }
                 iterCtor = classDiff.ctorsAdded.iterator();
                 while ((indexType == 3 || indexType == 1) && iterCtor.hasNext()) {
                     ConstructorAPI ctor = (ConstructorAPI)(iterCtor.next());
-                    Index idx = new Index(className, 1, pkgName, ctor.type_);
+                    Index idx = new Index(className, 1, pkgName, ctor.getSignature());
                     idx.doc_ = ctor.doc_; // Used for checking @since
                     ctorNames.add(idx);
                 }

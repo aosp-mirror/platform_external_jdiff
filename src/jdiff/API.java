@@ -177,7 +177,7 @@ public class API {
      */
     public static void dumpCtor(ConstructorAPI c, int indent) {
         for (int i = 0; i < indent; i++) System.out.print(" ");
-        System.out.println("Ctor type: " + c.type_);
+        System.out.println("Ctor type: " + c.getSignature());
         // Display exceptions 
         System.out.print("exceptions: " + c.exceptions_ + " ");
         // Dump modifiers common to all
