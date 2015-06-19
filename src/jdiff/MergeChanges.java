@@ -88,8 +88,8 @@ class MergeChanges {
             ConstructorAPI addedCtor = (ConstructorAPI)(classDiff.ctorsAdded.get(startAdded));
             // Create a MemberDiff for this change
             MemberDiff ctorDiff = new MemberDiff(classDiff.name_);
-            ctorDiff.oldType_ = removedCtor.type_;
-            ctorDiff.newType_ = addedCtor.type_; // Should be the same as removedCtor.type
+            ctorDiff.oldType_ = removedCtor.getSignature();
+            ctorDiff.newType_ = addedCtor.getSignature(); // Should be the same as removedCtor.type
             ctorDiff.oldExceptions_ = removedCtor.exceptions_;
             ctorDiff.newExceptions_ = addedCtor.exceptions_;
             ctorDiff.addModifiersChange(removedCtor.modifiers_.diff(addedCtor.modifiers_));

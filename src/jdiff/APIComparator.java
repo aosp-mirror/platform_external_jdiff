@@ -379,10 +379,10 @@ public class APIComparator {
                     // If there is one constructor in the oldClass and one
                     // constructor in the new class, then mark it as changed
                     MemberDiff memberDiff = new MemberDiff(oldClass.name_);
-                    memberDiff.oldType_ = oldCtor.type_;
+                    memberDiff.oldType_ = oldCtor.getSignature();
                     memberDiff.oldExceptions_ = oldCtor.exceptions_;
                     ConstructorAPI newCtor  = (ConstructorAPI)(newClass.ctors_.get(0));
-                    memberDiff.newType_ = newCtor.type_;
+                    memberDiff.newType_ = newCtor.getSignature();
                     memberDiff.newExceptions_ = newCtor.exceptions_;
                     // Track changes in documentation
                     if (docChanged(oldCtor.doc_, newCtor.doc_)) {

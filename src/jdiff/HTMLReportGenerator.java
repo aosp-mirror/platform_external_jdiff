@@ -551,7 +551,7 @@ public class HTMLReportGenerator {
             Iterator iter = classDiff.ctorsRemoved.iterator();
             while (iter.hasNext()) {
                 ConstructorAPI ctorAPI = (ConstructorAPI)(iter.next());
-                String ctorType = ctorAPI.type_;
+                String ctorType = ctorAPI.getSignature();
                 if (ctorType.compareTo("void") == 0)
                     ctorType = "";
                 String id = className + "(" + ctorType + ")";
@@ -567,7 +567,7 @@ public class HTMLReportGenerator {
             Iterator iter = classDiff.ctorsAdded.iterator();
             while (iter.hasNext()) {
                 ConstructorAPI ctorAPI = (ConstructorAPI)(iter.next());
-                String ctorType = ctorAPI.type_;
+                String ctorType = ctorAPI.getSignature();
                 if (ctorType.compareTo("void") == 0)
                     ctorType = "";
                 String id = className + "(" + ctorType + ")";

@@ -13,35 +13,35 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.*;
 
 /**
- * Creates an API object from an XML file. The API object is the internal 
+ * Creates an API object from an XML file. The API object is the internal
  * representation of an API.
  * All methods in this class for populating an API object are static.
- * 
+ *
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
 public class XMLToAPI {
 
-    /** The instance of the API object which is populated from the file. */ 
+    /** The instance of the API object which is populated from the file. */
     private static API api_ = null;
 
     /** Default constructor. */
     private XMLToAPI() {
-    }   
-  
-    /** 
+    }
+
+    /**
      * Read the file where the XML representing the API is stored.
      *
-     * @param filename The full name of the file containing the XML 
+     * @param filename The full name of the file containing the XML
      *                 representing the API
      * @param createGlobalComments If set, then store possible comments
-     * @param apiName The simple name of the API file. If -oldapidir and 
-     *                -newapidir are not used, then this is the same as 
+     * @param apiName The simple name of the API file. If -oldapidir and
+     *                -newapidir are not used, then this is the same as
      *                the filename parameter
      */
     public static API readFile(String filename, boolean createGlobalComments,
-			       String apiName) {
-        // The instance of the API object which is populated from the file. 
+            String apiName) {
+        // The instance of the API object which is populated from the file.
         api_ = new API();
         api_.name_ = apiName; // Checked later
         try {
@@ -91,7 +91,7 @@ public class XMLToAPI {
         return api_;
     } //readFile()
 
-    /** 
+    /**
      * Add the inherited methods and fields to each class in turn.
      */
     public static void addInheritedElements() {
@@ -120,8 +120,8 @@ public class XMLToAPI {
         } //while (iter.hasNext())
     }
 
-    /** 
-     * Add all the inherited methods and fields in the second class to 
+    /**
+     * Add all the inherited methods and fields in the second class to
      * the first class, marking them as inherited from the second class.
      * Do not add a method or a field if it is already defined locally.
      *
@@ -143,18 +143,18 @@ public class XMLToAPI {
                 Iterator iter2 = child.methods_.iterator();
                 while (iter2.hasNext()) {
                     MethodAPI localM = (MethodAPI)(iter2.next());
-                    if (localM.name_.compareTo(m.name_) == 0 && 
+                    if (localM.name_.compareTo(m.name_) == 0 &&
                         localM.getSignature().compareTo(m.getSignature()) == 0)
                         overridden = true;
                 }
                 if (!overridden && m.inheritedFrom_ == null &&
-                    m.modifiers_.visibility != null && 
+                    m.modifiers_.visibility != null &&
                     m.modifiers_.visibility.compareTo("private") != 0) {
                     MethodAPI m2 = new MethodAPI(m);
                     m2.inheritedFrom_ = fqParentName;
                     child.methods_.add(m2);
                 }
-            }            
+            }
         }
         if (parent.fields_.size() != 0) {
             Iterator iter = parent.fields_.iterator();
@@ -162,13 +162,13 @@ public class XMLToAPI {
                 FieldAPI f = (FieldAPI)(iter.next());
                 if (child.fields_.indexOf(f) == -1 &&
                     f.inheritedFrom_ == null &&
-                    f.modifiers_.visibility != null && 
+                    f.modifiers_.visibility != null &&
                     f.modifiers_.visibility.compareTo("private") != 0) {
                     FieldAPI f2 = new FieldAPI(f);
                     f2.inheritedFrom_ = fqParentName;
                     child.fields_.add(f2);
                 }
-            }            
+            }
         }
 
         // Look up any inherited classes or interfaces
@@ -192,30 +192,35 @@ public class XMLToAPI {
 // Methods to add data to an API object. Called by the XML parser.
 //
 
-    /** 
+    /**
      * Set the name of the API object.
      *
      * @param name The name of the package.
      */
     public static void nameAPI(String name) {
         if (name == null) {
-            System.out.println("Error: no API identifier found in the XML file '" + api_.name_ + "'");
-            System.exit(3);
+            System.out.println("Warning: no API identifier found in the XML file '" + api_.name_ + "'");
+            String filename = api_.name_.substring(0, api_.name_.lastIndexOf(".xml"));
+            // System.out.println(" api level:" + filename);
+            System.out.println("Using '" + filename + "' as the API identifier.");
+            api_.name_ = filename;
+            // System.exit(3);
+            return;
         }
-        // Check the given name against the filename currently stored in 
+        // Check the given name against the filename currently stored in
         // the name_ field
         String filename2 = name.replace(' ','_');
         filename2 += ".xml";
         if (filename2.compareTo(api_.name_) != 0) {
-            System.out.println("Warning: API identifier in the XML file (" + 
+            System.out.println("Warning: API identifier in the XML file (" +
                                name + ") differs from the name of the file '" +
                                api_.name_ + "'");
         }
         api_.name_ = name;
     }
-   
-    /** 
-     * Create a new package and add it to the API. Called by the XML parser. 
+
+    /**
+     * Create a new package and add it to the API. Called by the XML parser.
      *
      * @param name The name of the package.
      */
@@ -223,15 +228,15 @@ public class XMLToAPI {
         api_.currPkg_ = new PackageAPI(name);
         api_.packages_.add(api_.currPkg_);
     }
-   
-    /** 
-     * Create a new class and add it to the current package. Called by the XML parser. 
+
+    /**
+     * Create a new class and add it to the current package. Called by the XML parser.
      *
      * @param name The name of the class.
      * @param parent The name of the parent class, null if no class is extended.
      * @param modifiers Modifiers for this class.
      */
-    public static void addClass(String name, String parent, 
+    public static void addClass(String name, String parent,
                                 boolean isAbstract,
                                 Modifiers modifiers) {
         api_.currClass_ = new ClassAPI(name, parent, false, isAbstract, modifiers);
@@ -242,24 +247,24 @@ public class XMLToAPI {
             System.out.println("Warning: duplicate class : " + fqName + " found. Using the first instance only.");
         }
     }
-  
-    /** 
-     * Add an new interface and add it to the current package. Called by the 
+
+    /**
+     * Add an new interface and add it to the current package. Called by the
      * XML parser.
      *
      * @param name The name of the interface.
-     * @param parent The name of the parent interface, null if no 
+     * @param parent The name of the parent interface, null if no
      *               interface is extended.
      */
-    public static void addInterface(String name, String parent, 
+    public static void addInterface(String name, String parent,
                                     boolean isAbstract,
                                     Modifiers modifiers) {
         api_.currClass_ = new ClassAPI(name, parent, true, isAbstract, modifiers);
         api_.currPkg_.classes_.add(api_.currClass_);
     }
-  
-    /** 
-     * Add an inherited interface to the current class. Called by the XML 
+
+    /**
+     * Add an inherited interface to the current class. Called by the XML
      * parser.
      *
      * @param name The name of the inherited interface.
@@ -267,31 +272,31 @@ public class XMLToAPI {
     public static void addImplements(String name) {
        api_.currClass_.implements_.add(name);
     }
-  
-    /** 
+
+    /**
      * Add a constructor to the current class. Called by the XML parser.
      *
-     * @param name The name of the constructor.
+     * @param name The name of the constructor (optional).
      * @param type The type of the constructor.
      * @param modifiers Modifiers for this constructor.
      */
-    public static void addCtor(String type, Modifiers modifiers) {
+    public static void addCtor(String name, String type, Modifiers modifiers) {
         String t = type;
         if (t == null)
             t = "void";
-        api_.currCtor_ = new ConstructorAPI(t, modifiers);
+        api_.currCtor_ = new ConstructorAPI(name, t, modifiers);
         api_.currClass_.ctors_.add(api_.currCtor_);
     }
 
-    /** 
+    /**
      * Add a method to the current class. Called by the XML parser.
      *
      * @param name The name of the method.
      * @param returnType The return type of the method, null if it is void.
      * @param modifiers Modifiers for this method.
      */
-    public static void addMethod(String name, String returnType, 
-                                 boolean isAbstract, boolean isNative, 
+    public static void addMethod(String name, String returnType,
+                                 boolean isAbstract, boolean isNative,
                                  boolean isSynchronized, Modifiers modifiers) {
         String rt = returnType;
         if (rt == null)
@@ -301,7 +306,7 @@ public class XMLToAPI {
         api_.currClass_.methods_.add(api_.currMethod_);
     }
 
-    /** 
+    /**
      * Add a field to the current class. Called by the XML parser.
      *
      * @param name The name of the field.
@@ -317,28 +322,33 @@ public class XMLToAPI {
         api_.currClass_.fields_.add(api_.currField_);
     }
 
-    /** 
-     * Add a parameter to the current method. Called by the XML parser.
-     * Constuctors have their type (signature) in an attribute, since it 
+    /**
+     * Add a parameter to the current method or constructor. Called by the XML parser.
+     * Constuctors have their type (signature) in an attribute, since it
      * is often shorter and makes parsing a little easier.
      *
      * @param name The name of the parameter.
      * @param type The type of the parameter, null if it is void.
+     * @param isConstructor Whether the given parameter is for a constructor
      */
-    public static void addParam(String name, String type) {
+    public static void addParam(String name, String type, boolean isConstructor) {
         String t = type;
         if (t == null)
             t = "void";
         ParamAPI paramAPI = new ParamAPI(name, t);
-        api_.currMethod_.params_.add(paramAPI);
+        if (isConstructor) {
+            api_.currCtor_.params_.add(paramAPI);
+        } else {
+            api_.currMethod_.params_.add(paramAPI);
+        }
     }
 
-    /** 
-     * Add an exception to the current method or constructor. 
+    /**
+     * Add an exception to the current method or constructor.
      * Called by the XML parser.
      *
      * @param name The name of the parameter.
-     * @param type The type of the parameter. 
+     * @param type The type of the parameter.
      *             May be null in JDiff1.0.8 and earlier versions.
      * @param currElement Name of the current element.
      */
@@ -359,18 +369,18 @@ public class XMLToAPI {
         }
     }
 
-    /** 
-     * If set, validate the XML which represents an API. By default, this is 
-     * not set for reasons of efficiency, and also because if JDiff generated 
-     * the XML, it should not need validating. 
+    /**
+     * If set, validate the XML which represents an API. By default, this is
+     * not set for reasons of efficiency, and also because if JDiff generated
+     * the XML, it should not need validating.
      */
     public static boolean validateXML = false;
 
-    /** 
+    /**
      * If set, then store and display the whole qualified name of exceptions.
-     * If not set, then store and display just the name of the exception, 
+     * If not set, then store and display just the name of the exception,
      * which is shorter, but may not detect when an exception changes class,
      * but retains the same name.
      */
     private static boolean showExceptionTypes = true;
-}  
+}

@@ -3,10 +3,10 @@ package jdiff;
 import java.io.*;
 import java.util.*;
 
-/** 
- * Class to represent a method, analogous to MethodDoc in the 
- * Javadoc doclet API. 
- * 
+/**
+ * Class to represent a method, analogous to MethodDoc in the
+ * Javadoc doclet API.
+ *
  * The method used for Collection comparison (compareTo) must make its
  * comparison based upon everything that is known about this method.
  *
@@ -21,14 +21,14 @@ class MethodAPI implements Comparable {
     /** Return type of the method. */
     public String returnType_ = null;
 
-    /** 
+    /**
      * The fully qualified name of the class or interface this method is
      * inherited from. If this is null, then the method is defined locally
      * in this class or interface.
      */
     public String inheritedFrom_ = null;
 
-    /** 
+    /**
      * The exceptions thrown by this method, being all the exception types
      * separated by commas. "no exceptions" if no exceptions are thrown.
      */
@@ -52,7 +52,7 @@ class MethodAPI implements Comparable {
     public String doc_ = null;
 
     /** Constructor. */
-    public MethodAPI(String name, String returnType, boolean isAbstract, 
+    public MethodAPI(String name, String returnType, boolean isAbstract,
                      boolean isNative, boolean isSynchronized,
                      Modifiers modifiers) {
         name_ = name;
@@ -79,9 +79,9 @@ class MethodAPI implements Comparable {
         signature_ = m.signature_; // Cached
     }
 
-    /** 
-     * Compare two methods, including the return type, and parameter 
-     * names and types, and modifiers. 
+    /**
+     * Compare two methods, including the return type, and parameter
+     * names and types, and modifiers.
      */
     public int compareTo(Object o) {
         MethodAPI oMethod = (MethodAPI)o;
@@ -96,11 +96,11 @@ class MethodAPI implements Comparable {
         if (isAbstract_ != oMethod.isAbstract_) {
             return -1;
         }
-        if (Diff.showAllChanges && 
+        if (Diff.showAllChanges &&
 	    isNative_ != oMethod.isNative_) {
             return -1;
         }
-        if (Diff.showAllChanges && 
+        if (Diff.showAllChanges &&
 	    isSynchronized_ != oMethod.isSynchronized_) {
             return -1;
         }
@@ -117,17 +117,17 @@ class MethodAPI implements Comparable {
             return -1;
         return 0;
     }
-  
-    /** 
-     * Tests two methods, using just the method name, used by indexOf(). 
+
+    /**
+     * Tests two methods, using just the method name, used by indexOf().
      */
     public boolean equals(Object o) {
         if (name_.compareTo(((MethodAPI)o).name_) == 0)
             return true;
         return false;
     }
-    
-    /** 
+
+    /**
      * Tests two methods for equality, using just the signature.
      */
     public boolean equalSignatures(Object o) {
@@ -135,9 +135,9 @@ class MethodAPI implements Comparable {
             return true;
         return false;
     }
-    
+
     /** Cached result of getSignature(). */
-    public String signature_ = null;
+    private String signature_ = null;
 
     /** Return the signature of the method. */
     public String getSignature() {
@@ -154,6 +154,6 @@ class MethodAPI implements Comparable {
             first = false;
         }
         signature_ = res;
-        return res; 
+        return res;
     }
 }
