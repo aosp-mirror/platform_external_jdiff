@@ -1,6 +1,7 @@
 package jdiff;
 
 import com.sun.javadoc.*;
+import com.sun.javadoc.Parameter;
 import com.sun.javadoc.ParameterizedType;
 import com.sun.javadoc.Type;
 
