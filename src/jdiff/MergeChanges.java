@@ -210,9 +210,10 @@ class MergeChanges {
             for (int i = startAdded; i <= endAdded; i++) {
                 MethodAPI addedMethod2 = (MethodAPI)(classDiff.methodsAdded.get(i));
                 if (addedMethod2.inheritedFrom_ == null &&
-                    removedMethod.equalSignatures(addedMethod2))
+                    removedMethod.equalSignatures(addedMethod2)) {
                     addedIdx = i;
                     break;
+                }
             }
             if (addedIdx == -1)
                 return;
