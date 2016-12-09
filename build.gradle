@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import com.android.internal.BuildUtils
-
 apply plugin: 'java'
+
+import javax.tools.ToolProvider
 
 sourceSets {
     main {
@@ -25,5 +25,6 @@ sourceSets {
 }
 
 dependencies {
-    compile files(BuildUtils.findToolsJar(project))
+    // tools.jar required for com.sun.javadoc
+    compile files(((URLClassLoader) ToolProvider.getSystemToolClassLoader()).getURLs())
 }
