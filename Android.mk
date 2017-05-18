@@ -3,7 +3,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
-LOCAL_CLASSPATH := $(HOST_JDK_TOOLS_JAR)
+LOCAL_CLASSPATH := $(OPTIONAL_HOST_JDK_TOOLS_JAR)
 
 LOCAL_MODULE := jdiff
 
