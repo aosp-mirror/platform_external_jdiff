@@ -81,9 +81,10 @@ class ConstructorAPI implements Comparable {
      * Tests two constructors, using just the name and type, used by indexOf().
      */
     public boolean equals(Object o) {
+
         ConstructorAPI constructorAPI = (ConstructorAPI)o;
         if (compareNullIsLeast(name_, constructorAPI.name_) == 0 &&
-                compareNullIsLeast(type_, constructorAPI.type_) == 0)
+                compareNullIsLeast(getSignature(), constructorAPI.getSignature()) == 0)
             return true;
         return false;
     }
