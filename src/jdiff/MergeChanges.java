@@ -190,11 +190,11 @@ class MergeChanges {
         int endRemoved = classDiff.methodsRemoved.lastIndexOf(removedMethod);
         int startAdded = classDiff.methodsAdded.indexOf(removedMethod);
         int endAdded = classDiff.methodsAdded.lastIndexOf(removedMethod);
-        if (startRemoved != -1 && endRemoved != -1 && 
+        if (startRemoved != -1 && endRemoved != -1 &&
             startAdded != -1 && endAdded != -1) {
             // Find the index of the current removed method
             int removedIdx = -1;
-            for (int i = startRemoved; i <= endRemoved; i++) {                
+            for (int i = startRemoved; i <= endRemoved; i++) {
                 if (removedMethod.equalSignatures(classDiff.methodsRemoved.get(i))) {
                     removedIdx = i;
                     break;
@@ -204,7 +204,7 @@ class MergeChanges {
                 System.out.println("Error: removed method index not found");
                 System.exit(5);
             }
-            // Find the index of the added method with the same signature, if 
+            // Find the index of the added method with the same signature, if
             // it exists, and make sure it is defined locally.
             int addedIdx = -1;
             for (int i = startAdded; i <= endAdded; i++) {
@@ -274,7 +274,7 @@ class MergeChanges {
         }
         // Native or not
         if (Diff.showAllChanges && 
-	    oldMethod.isNative_ != newMethod.isNative_) {
+        oldMethod.isNative_ != newMethod.isNative_) {
             String changeText = "";
             if (oldMethod.isNative_)
                 changeText += "Changed from native to non-native.";
@@ -284,7 +284,7 @@ class MergeChanges {
         }
         // Synchronized or not
         if (Diff.showAllChanges && 
-	    oldMethod.isSynchronized_ != newMethod.isSynchronized_) {
+        oldMethod.isSynchronized_ != newMethod.isSynchronized_) {
             String changeText = "";
             if (oldMethod.isSynchronized_)
                 changeText += "Changed from synchronized to non-synchronized.";
