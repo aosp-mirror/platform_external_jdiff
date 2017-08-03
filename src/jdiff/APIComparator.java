@@ -862,17 +862,17 @@ public class APIComparator {
         return linkToClass(m.inheritedFrom_, m.name_, null, useNew);
     }
 
-    /** 
+    /**
      * Given the name of the class, generate a link to a relevant page.
-     * This was originally for inheritance changes, so the JDiff page could 
-     * be a class changes page, or a section in a removed or added classes 
+     * This was originally for inheritance changes, so the JDiff page could
+     * be a class changes page, or a section in a removed or added classes.
      * table. Since there was no easy way to tell which type the link
      * should be, it is now just a link to the relevant Javadoc page.
      */
     public static String linkToClass(String className, String memberName, 
                                      String memberType, boolean useNew) {
         if (!useNew && HTMLReportGenerator.oldDocPrefix == null) {
-            return "<tt>" + className + "</tt>"; // No link possible
+            return "<code>" + className + "</code>"; // No link possible
         }
         API api = oldAPI_;
         String prefix = HTMLReportGenerator.oldDocPrefix;
@@ -886,7 +886,7 @@ public class APIComparator {
                 System.out.println("Warning: class " + className + " not found in the new API when creating Javadoc link");
             else
                 System.out.println("Warning: class " + className + " not found in the old API when creating Javadoc link");
-            return "<tt>" + className + "</tt>";
+            return "<code>" + className + "</code>";
         }
         int clsIdx = className.indexOf(cls.name_);
         if (clsIdx != -1) {
@@ -895,13 +895,13 @@ public class APIComparator {
             String res = "<a href=\"" + prefix + pkgRef + cls.name_ + ".html#" + memberName;
             if (memberType != null)
                 res += "(" + memberType + ")";
-            res += "\" target=\"_top\">" + "<tt>" + cls.name_ + "</tt></a>";
+            res += "\" target=\"_top\">" + "<code>" + cls.name_ + "</code></a>";
             return res;
         }
-        return "<tt>" + className + "</tt>";
-    }    
+        return "<code>" + className + "</code>";
+    }
 
-    /** 
+    /**
      * Return the number of methods which are locally defined.
      */
     public int numLocalMethods(List methods) {
