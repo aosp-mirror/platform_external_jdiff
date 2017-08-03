@@ -17,8 +17,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * use tags such as &lt;p/&gt; rather than just &lt;p&gt;, since the XML
  * parser used requires that or matching end elements.
  *
- * From http://www.w3.org/TR/2000/REC-xhtml1-20000126:
- * "Empty elements must either have an end tag or the start tag must end with /&lt;". 
+ * From https://www.w3.org/TR/2000/REC-xhtml1-20000126:
+ * "Empty elements must either have an end tag or the start tag must end with /&lt;".
  *
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com

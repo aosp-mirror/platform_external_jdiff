@@ -4,23 +4,23 @@ import java.io.*;
 import java.util.*;
 
 /**
- * The internal representation of an API. 
- * 
- * RootDoc could have been used for representing this, but 
+ * The internal representation of an API.
+ *
+ * RootDoc could have been used for representing this, but
  * you cannot serialize a RootDoc object - see
- *  http://developer.java.sun.com/developer/bugParade/bugs/4125581.html
- * You might be able use Javadoc.Main() to create another RootDoc, but the 
+ *  https://developer.java.sun.com/developer/bugParade/bugs/4125581.html
+ * You might be able use Javadoc.Main() to create another RootDoc, but the
  * methods are package private. You can run javadoc in J2SE1.4, see:
- *  http://java.sun.com/j2se/1.4/docs/tooldocs/javadoc/standard-doclet.html#runningprogrammatically
+ *  https://java.sun.com/j2se/1.4/docs/tooldocs/javadoc/standard-doclet.html#runningprogrammatically
  * but you still can't get the RootDoc object.
  *
  * The advantage of writing out an XML representation of each API is that
  * later runs of JDiff don't have to have Javadoc scan all the files again,
- * a possibly lengthy process. XML also permits other source code in 
+ * a possibly lengthy process. XML also permits other source code in
  * languages other than Java to be scanned to produce XML, and then versions
  * of JDiff can be used to create documents describing the difference in those
  * APIs.
- * 
+ *
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
