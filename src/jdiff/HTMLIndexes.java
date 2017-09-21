@@ -84,15 +84,15 @@ public class HTMLIndexes {
                 filename += "_all" + h_.reportFileExt;
                 title = programElementType + " Differences Index";
             }
-                
+
             FileOutputStream fos = new FileOutputStream(filename);
             h_.reportFile = new PrintWriter(fos);
             h_.writeStartHTMLHeader();
             h_.writeHTMLTitle(title);
             h_.writeStyleSheetRef();
             h_.writeText("</HEAD>");
-            h_.writeText("<BODY>");
-            
+            h_.writeText("<BODY class=\"gc-documentation\" style=\"padding:12px;\">");
+
             if (programElementType.compareTo("Package") == 0) {
                 emitPackagesIndex(apiDiff, indexType);
             } else if (programElementType.compareTo("Class") == 0) {
@@ -145,7 +145,7 @@ public class HTMLIndexes {
                 // Don't emit a reference to the current letter
                 if (Character.toUpperCase(sw) != Character.toUpperCase(currChar)) {
                     if (swu == '_') {
-                        h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + "underscore" + "</font></a> ");
+                        h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + "_" + "</font></a> ");
                     } else {
                         h_.writeText("<a href=\"#" + swu + "\"><font size=\"" + size + "\">" + swu + "</font></a> ");
                     }
@@ -162,7 +162,7 @@ public class HTMLIndexes {
      * added and changes sub-indexes. 
      */
     private void emitIndexHeader(String indexName, int indexType,
-                                 boolean hasRemovals, 
+                                 boolean hasRemovals,
                                  boolean hasAdditions, boolean hasChanges) {
         String linkIndexName = indexName.toLowerCase();
         boolean isAllDiffs = false;
@@ -171,71 +171,66 @@ public class HTMLIndexes {
             isAllDiffs = true;
         }
         h_.writeText("<a NAME=\"topheader\"></a>"); // Named anchor
-        h_.writeText("<table summary=\"Index for " +  indexName + "\" width=\"100%\" class=\"index\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+        h_.writeText("<table summary=\"Index for " +  indexName + "\" width=\"100%\" class=\"jdiffIndex\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"padding-bottom:0;margin-bottom:0;\">");
         h_.writeText("  <tr>");
         h_.writeText("  <th class=\"indexHeader\">");
         h_.writeText("    Filter the Index:");
         h_.writeText("  </th>");
         h_.writeText("  </tr>");
         h_.writeText("  <tr>");
-        h_.writeText("  <td class=\"indexText\" style=\"line-height:1.5em;padding-left:2em;\">");
-//        h_.writeText("  <div style=\"line-height:1.25em;padding-left:1em;>\">");
-//        h_.writeText("  <FONT SIZE=\"-1\">");
-        // The index name is also a hidden link to the *index_all page
+        h_.writeText("  <td class=\"indexText\" style=\"line-height:1.3em;padding-left:2em;\">");
+
         if (indexType == 3) {
              h_.writeText("<b>" + indexName + "</b>"); }
         else if (isAllDiffs) {
-            h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" class=\"hiddenlink\">" + indexName + "</a>");
+            h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" xclass=\"hiddenlink\">" + indexName + "</a>");
         }
         else {
             h_.writeText("<a href=\"" + linkIndexName + "_index_all" + h_.reportFileExt + "\" class=\"staysblack\">All " + indexName + "</a>");
         }
-//        h_.writeText("  </FONT>");
 
         h_.writeText("  <br>");
-//        h_.writeText("  <FONT SIZE=\"-1\">");
+
         if (hasRemovals) {
           if (indexType == 0) {
             h_.writeText("<b>Removals</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_removals" + h_.reportFileExt + "\" class=\"hiddenlink\">Removals</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_removals" + h_.reportFileExt + "\" xclass=\"hiddenlink\">Removals</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Removals</font>");
         }
-//        h_.writeText("  </FONT>");
 
         h_.writeText("  <br>");
-//      h_.writeText("  <FONT SIZE=\"-1\">");
+
         if (hasAdditions) {
           if (indexType == 1) {
             h_.writeText("<b>Additions</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_additions" + h_.reportFileExt + "\"class=\"hiddenlink\">Additions</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_additions" + h_.reportFileExt + "\"xclass=\"hiddenlink\">Additions</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Additions</font>");
         }
-//        h_.writeText("  </FONT>");
 
         h_.writeText("  <br>");
-//         h_.writeText("  <FONT SIZE=\"-1\">");
+
         if (hasChanges) {
           if (indexType == 2) {
             h_.writeText("<b>Changes</b>");
           } else {
-            h_.writeText("<A HREF=\"" + linkIndexName + "_index_changes" + h_.reportFileExt + "\"class=\"hiddenlink\">Changes</A>");
+            h_.writeText("<A HREF=\"" + linkIndexName + "_index_changes" + h_.reportFileExt + "\"xclass=\"hiddenlink\">Changes</A>");
           }
         } else {
             h_.writeText("<font color=\"#999999\">Changes</font>");
         }
-//        h_.writeText("  </FONT>");
-//        h_.writeText("  </div>");
+
         h_.writeText("  </td>");
         h_.writeText("  </tr>");
         h_.writeText("</table>");
-        h_.writeText("<font size=\"-2\"><strong>Bold</strong>&nbsp;indicates&nbsp;New;&nbsp;<strike>Strike</strike>&nbsp;indicates&nbsp;deleted</font>");
-        h_.writeText("  </br>");
+        h_.writeText("<div id=\"indexTableCaption\" style=\"background-color:#eee;padding:0 4px 0 4px;font-size:11px;margin-bottom:1em;\">");
+        h_.writeText("Listed as: <span style=\"color:#069\"><strong>Added</strong></span>,  <span style=\"color:#069\"><strike>Removed</strike></span>,  <span style=\"color:#069\">Changed</span></font>");
+        h_.writeText("</div>");
 
     }
 
@@ -281,14 +276,15 @@ public class HTMLIndexes {
         // Package names are unique, so no need to check for duplicates.
         iter = packageNames.iterator();
         char oldsw = '\0';
+        h_.writeText("<div id=\"indexTableEntries\">");
         while (iter.hasNext()) {
             Index pkg = (Index)(iter.next());
             oldsw = emitPackageIndexEntry(pkg, oldsw);
         }
     }
 
-    /** 
-     * Emit an index entry for a package. 
+    /**
+     * Emit an index entry for a package.
      * Package names are unique, so no need to check for duplicates.
      */
     public char emitPackageIndexEntry(Index pkg, char oldsw) {
@@ -497,7 +493,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(classNames, sw, false);
@@ -600,7 +596,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(ctorNames, sw, false);
@@ -700,7 +696,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(methNames, sw, false);
@@ -816,7 +812,7 @@ public class HTMLIndexes {
             // Add the named anchor for this new letter
             h_.writeText("<A NAME=\"" + Character.toUpperCase(res) + "\"></A>");
             if (sw == '_')
-                h_.writeText("<br><b>underscore</b>&nbsp;");
+                h_.writeText("<br><b>_</b>&nbsp;");
             else
                 h_.writeText("<br><font size=\"+2\">" + Character.toUpperCase(sw) + "</font>&nbsp;");
             generateLetterIndex(fieldNames, sw, false);
@@ -826,42 +822,41 @@ public class HTMLIndexes {
             h_.writeText("<i>" + fld.name_ + "</i><br>");
         }
         if (multipleMarker != 0) {
-// More context than this is helpful here: h_.indent(INDENT_SIZE);
-            h_.writeText("&nbsp;in&nbsp;");
+            h_.writeText("<nobr>&nbsp;in&nbsp;");
         }
         // Deal with each type of difference
         if (fld.changeType_ == 0) {
-            String commentID = className + "." + fld.name_;                    
-            if (multipleMarker == 0) {            
+            String commentID = className + "." + fld.name_;
+            if (multipleMarker == 0) {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + fld.name_ + "</strike></A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + className + "</strike></A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\"><strike>" + className + "</strike></A>");
                 h_.writeText("</nobr><br>");
             }
         } else if (fld.changeType_ == 1) {
-            String commentID = className + "." + fld.name_;                    
-            if (multipleMarker == 0) {            
+            String commentID = className + "." + fld.name_;
+            if (multipleMarker == 0) {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + fld.name_ + "</A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
                 h_.writeText("</nobr><br>");
             }
         } else if (fld.changeType_ == 2) {
-            String commentID = className + "." + fld.name_;                    
-            if (multipleMarker == 0) {            
+            String commentID = className + "." + fld.name_;
+            if (multipleMarker == 0) {
                 h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + fld.name_ + "</A>");
                 h_.writeText("</nobr><br>");
             } else {
-                h_.writeText("<nobr><A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
+                h_.writeText("<A HREF=\"" + memberRef + h_.reportFileExt + "#" + commentID + "\" class=\"hiddenlink\" target=\"rightframe\">" + className + "</A>");
                 h_.writeText("</nobr><br>");
             }
         }
         return res;
     }
 
-    /** 
+    /**
      * Emit the index of all changes, which appears in the bottom left frame.
      * Has to be run after all the other indexes have been written, since it
      * uses data from when they are generated.
