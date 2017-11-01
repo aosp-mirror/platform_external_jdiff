@@ -60,9 +60,9 @@ public class XMLToAPI {
             }
 
             if (validateXML) {
-                parser.setFeature("http://xml.org/sax/features/namespaces", true);
-                parser.setFeature("http://xml.org/sax/features/validation", true);
-                parser.setFeature("http://apache.org/xml/features/validation/schema", true);
+                parser.setFeature("https://xml.org/sax/features/namespaces", true);
+                parser.setFeature("https://xml.org/sax/features/validation", true);
+                parser.setFeature("https://apache.org/xml/features/validation/schema", true);
             }
 
             parser.setContentHandler(handler);

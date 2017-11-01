@@ -270,13 +270,13 @@ public class JDiff extends Doclet {
     /** If set, then read in two XML files and compare their APIs. */
     static boolean compareAPIs = false;
 
-    /** 
-     * The file separator for the local filesystem, forward or backward slash. 
+    /**
+     * The file separator for the local filesystem, forward or backward slash.
      */
     static String DIR_SEP = System.getProperty("file.separator");
 
     /** Details for where to find JDiff. */
-    static final String jDiffLocation = "http://www.jdiff.org";
+    static final String jDiffLocation = "https://www.jdiff.org";
     /** Contact email address for the primary JDiff maintainer. */
     static final String authorEmail = "mdoar@pobox.com";
 

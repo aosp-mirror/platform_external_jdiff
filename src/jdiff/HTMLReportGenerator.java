@@ -87,42 +87,38 @@ public class HTMLReportGenerator {
 
            // writeText("<div class=\"g-section g-tpl-180\">");
            // Add the nav bar for the summary page
-            writeNavigationBar(reportFileName + "-summary", null, null, 
+            writeNavigationBar(reportFileName + "-summary", null, null,
                                null, 0, true,
-                               apiDiff.packagesRemoved.size() != 0, 
+                               apiDiff.packagesRemoved.size() != 0,
                                apiDiff.packagesAdded.size() != 0,
                                apiDiff.packagesChanged.size() != 0);
-            
+
+            writeText("    <div id=\"docTitleContainer\">");
             // Write the title in the body with some formatting
             if (docTitle == null) {
-	                //writeText("<center>");        
-                writeText("  <div id=\"titleAligner\" style=\"vertical-align:top;padding:1em;margin-left:0;text-align:left;\">");
-                writeText("    <H1 class=\"pagecontenth1\">API&nbsp;Differences&nbsp;Report</H1>");
-                writeText("  </div>");
+	                //writeText("<center>");
+                writeText("<h1>Android&nbsp;API&nbsp;Differences&nbsp;Report</h1>");
             } else {
-                writeText("  <div id=\"titleAligner\" style=\"vertical-align:top;padding:1em;margin-left:0;text-align:left;\">");
-                writeText("    <H1 class=\"pagecontenth1\">" + docTitle + "</H1>");
-                writeText("  </div>");
+                writeText("    <h1>" + docTitle + "</h1>");
             }
 
-            writeText("<p>This document details the changes in the Android framework API. It shows ");
-            writeText("additions, modifications, and removals for packages, classes, methods, and "); 
-            writeText("fields. Each reference to an API change includes a brief description of the ");
-            writeText("API and an explanation of the change and suggested workaround, where available.</p>");
+            writeText("<p>This report details the changes in the core Android framework API between two <a ");  writeText("href=\"https://developer.android.com/guide/appendix/api-levels.html\" target=\"_top\">API Level</a> ");
+            writeText("specifications. It shows additions, modifications, and removals for packages, classes, methods, and fields. ");
+            writeText("The report also includes general statistics that characterize the extent and type of the differences.</p>");
 
-            writeText("<p>The differences described in this report are based a comparison of the APIs ");
-            writeText("whose versions are specified in the upper-right corner of this page. It compares a ");
-            writeText("newer \"to\" API to an older \"from\" version, noting any changes relative to the ");
-            writeText("older API. So, for example, indicated API removals are no longer present in the \"to\" ");
-            writeText("API.</p>");
+            writeText("<p>This report is based a comparison of the Android API specifications ");
+            writeText("whose API Level identifiers are given in the upper-right corner of this page. It compares a ");
+            writeText("newer \"to\" API to an older \"from\" API, noting all changes relative to the ");
+            writeText("older API. So, for example, API elements marked as removed are no longer present in the \"to\" ");
+            writeText("API specification.</p>");
 
             writeText("<p>To navigate the report, use the \"Select a Diffs Index\" and \"Filter the Index\" ");
             writeText("controls on the left. The report uses text formatting to indicate <em>interface names</em>, ");
-            writeText("<a href= ><tt>links to reference documentation</tt></a>, and <a href= >links to change ");
-            writeText("description</a>. </p>");
+            writeText("<a href= ><code>links to reference documentation</code></a>, and <a href= >links to change ");
+            writeText("description</a>. The statistics are accessible from the \"Statistics\" link in the upper-right corner.</p>");
 
             writeText("<p>For more information about the Android framework API and SDK, ");
-            writeText("see the <a href=\"http://code.google.com/android/index.html\" target=\"_top\">Android product site</a>.</p>");
+            writeText("see the <a href=\"https://developer.android.com/index.html\" target=\"_top\">Android Developers site</a>.</p>");
 
             // Write the contents and the other files as well
             writeReport(apiDiff);
@@ -236,29 +232,29 @@ public class HTMLReportGenerator {
                 reportChangedPackage(pkgDiffs, i);
             }
         }
-            writeText("</div><!-- end pagecontent -->");
-            writeText("</div><!-- end codesitecontent -->");
-            writeText("<div style=\"padding-left: 10px; padding-right: 10px; margin-top: 0; padding-bottom: 15px;\">");
-            writeText("  <table style=\"width: 100%; border: none;\"><tr>");
-            writeText("    <td style=\"text-align:center;font-size: 10pt; border: none; color: ccc;\"> ");
-            writeText("      <span>&copy;2008 Google - ");
-            writeText("            <a href=\"http://code.google.com\">Code Home</a> - ");
-            writeText("            <a href=\"http://www.google.com/accounts/TOS\">Site Terms of Service</a> - "); 
-            writeText("            <a href=\"http://www.google.com/privacy.html\">Privacy Policy</a> ");
-            writeText("      </span>");
-            writeText("      <div style=\"position:relative;margin-top:-2em;" );
-            writeText("        font-size:8pt;color:aaa;text-align:right;\">");
-            writeText("        <em>Generated by <a href=\"http://www.jdiff.org/\">JDiff</a></em><br><img ");
-            writeText("        align=\"right\" src=\"../../../assets/jdiff_logo.gif\">");
-            writeText("      </span>");
-            writeText("    </td>");
-            writeText(" </tr></table>");
-            writeText("</div>");
-            writeText("</div><!-- end gc-containter -->");
-}
-    
-    /** 
-     * Write out the details of a changed package in a separate file. 
+            writeText("      </div>	");
+            writeText("      <div id=\"footer\">");
+            writeText("        <div id=\"copyright\">");
+            writeText("        Except as noted, this content is licensed under ");
+            writeText("        <a href=\"https://creativecommons.org/licenses/by/2.5/\"> Creative Commons Attribution 2.5</a>.");
+            writeText("        For details and restrictions, see the <a href=\"https://developer.android.com/license.html\">Content License</a>.");
+            writeText("        </div>");
+            writeText("      <div id=\"footerlinks\">");
+            writeText("      <p>");
+            writeText("        <a href=\"https://www.android.com/terms.html\">Site Terms of Service</a> -");
+            writeText("        <a href=\"https://www.android.com/privacy.html\">Privacy Policy</a> -");
+            writeText("        <a href=\"https://www.android.com/branding.html\">Brand Guidelines</a>");
+            writeText("      </p>");
+            writeText("    </div>");
+            writeText("    </div> <!-- end footer -->");
+            writeText("    </div><!-- end doc-content -->");
+            writeText("    </div> <!-- end body-content --> ");
+    }
+
+
+
+    /**
+     * Write out the details of a changed package in a separate file.
      */
     public void reportChangedPackage(PackageDiff[] pkgDiffs, int pkgIndex) {
         PackageDiff pkgDiff = pkgDiffs[pkgIndex];
@@ -290,7 +286,7 @@ public class HTMLReportGenerator {
         pkgRef = pkgRef.replace('.', '/');
         pkgRef = newDocPrefix + pkgRef + "/package-summary";
         // A link to the package in the new API
-        String linkedPkgName = "<A HREF=\"" + pkgRef + ".html\" target=\"_top\"><font size=\"+1\"><tt>" + pkgName + "</tt></font></A>";
+        String linkedPkgName = "<A HREF=\"" + pkgRef + ".html\" target=\"_top\"><font size=\"+1\"><code>" + pkgName + "</code></font></A>";
         String prevPkgRef = null;
         if (pkgIndex != 0) {
             prevPkgRef = "pkg_" + pkgDiffs[pkgIndex-1].name_ + reportFileExt;
@@ -300,7 +296,7 @@ public class HTMLReportGenerator {
         if (pkgIndex < pkgDiffs.length - 1) {
             nextPkgRef = "pkg_" + pkgDiffs[pkgIndex+1].name_ + reportFileExt;
         }
-        
+
         writeSectionHeader("Package " + linkedPkgName, pkgName, 
                            prevPkgRef, nextPkgRef,
                            null, 1,
@@ -316,16 +312,16 @@ public class HTMLReportGenerator {
             String newPkgRef = pkgDocRef;
             if (oldDocPrefix != null)
                 oldPkgRef = oldDocPrefix + oldPkgRef;
-            else 
+            else
                 oldPkgRef = null;
             newPkgRef = newDocPrefix + newPkgRef;
-            if (oldPkgRef != null) 
+            if (oldPkgRef != null)
                 pkgDiff.documentationChange_ += "<A HREF=\"" + oldPkgRef +
-                    ".html#package_description\" target=\"_self\"><font size=\"+1\"><tt>old</tt></font></A> to ";
+                    ".html#package_description\" target=\"_self\"><code>old</code></A> to ";
             else
-                pkgDiff.documentationChange_ += "<font size=\"+1\"><tt>old</tt></font> to ";
-            pkgDiff.documentationChange_ += "<A HREF=\"" + newPkgRef + 
-                ".html#package_description\" target=\"_self\"><font size=\"+1\"><tt>new</tt></font></A>. ";
+                pkgDiff.documentationChange_ += "<font size=\"+1\"><code>old</code></font> to ";
+            pkgDiff.documentationChange_ += "<A HREF=\"" + newPkgRef +
+                ".html#package_description\" target=\"_self\"><code>new</code></A>. ";
             writeText(pkgDiff.documentationChange_);
         }
 
@@ -469,7 +465,7 @@ public class HTMLReportGenerator {
             classRef = newDocPrefix + classRef;
         }
         // A link to the class in the new API
-        String linkedClassName = "<A HREF=\"" + classRef + ".html\" target=\"_top\"><font size=\"+1\"><tt>" + className + "</tt></font></A>";
+        String linkedClassName = "<A HREF=\"" + classRef + ".html\" target=\"_top\"><font size=\"+2\"><code>" + className + "</code></font></A>";
         String lcn = pkgName + "." + linkedClassName;
         //Links to the previous and next classes
         String prevClassRef = null;
@@ -516,13 +512,13 @@ public class HTMLReportGenerator {
                     oldClassRef = oldDocPrefix + oldClassRef;
                 }
             }
-            if (oldDocPrefix != null) 
+            if (oldDocPrefix != null)
                 classDiff.documentationChange_ += "<A HREF=\"" + oldClassRef +
-                    ".html\" target=\"_self\"><font size=\"+1\"><tt>old</tt></font></A> to ";
+                    ".html\" target=\"_self\"><code>old</code></A> to ";
             else
-                classDiff.documentationChange_ += "<font size=\"+1\"><tt>old</tt></font> to ";
-            classDiff.documentationChange_ += "<A HREF=\"" + classRef + 
-                ".html\" target=\"_self\"><font size=\"+1\"><tt>new</tt></font></A>. ";
+                classDiff.documentationChange_ += "<font size=\"+1\"><code>old</code></font> to ";
+            classDiff.documentationChange_ += "<A HREF=\"" + classRef +
+                ".html\" target=\"_self\"><code>new</code></A>. ";
             writeText(classDiff.documentationChange_);
         }
 
@@ -704,8 +700,8 @@ public class HTMLReportGenerator {
 
     /** Write the start of the HTML header. */
     public void writeStartHTMLHeader(boolean addDate) {
-        writeText("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\"\"" + RootDocToXML.baseURI + "/TR/REC-html40/frameset.dtd\">");
-        writeText("<HTML>");
+        writeText("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"https://www.w3.org/TR/html4/strict.dtd\">");
+        writeText("<HTML style=\"overflow:auto;\">");
         writeText("<HEAD>");
         writeText("<meta name=\"generator\" content=\"JDiff v" + JDiff.version + "\">");
         writeText("<!-- Generated by the JDiff Javadoc doclet -->");
@@ -730,61 +726,72 @@ public class HTMLReportGenerator {
         writeStyleSheetRef(false);
     }
 
-    /** 
+    /**
      * Write the HTML style sheet reference. If inSameDir is set, don't add
      * "../" to the location.
      */
 
     public void writeStyleSheetRef(boolean inSameDir) {
         if (inSameDir) {
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/codesite.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/codesearch.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/semantic_headers.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/style.css\" />");
-            writeText("<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"stylesheet-jdiff.css\" TITLE=\"Style\">");
-	}
-        else {
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/codesite.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/codesearch.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/codesite/semantic_headers.css\" />");
-            writeText("<link rel=\"stylesheet\" type=\"text/css\" href=\"../../../assets/style.css\" />");
-            writeText("<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../stylesheet-jdiff.css\" TITLE=\"Style\">");
-	}
-// This doesn't work in non-windows browsers, so have to change the stylesheet
-//        writeText("<!-- Override the color choice for the navigation bar -->");
-//        writeText("<STYLE>");
-//        //writeText(".NavBarCell1     { background-color:#FFFF99;} /* palegoldenrod */");
-//        writeText(".NavBarCell1     { background-color:#FFFFCC;} /*  */");
-//        writeText("</STYLE>");
+            writeText("<link href=\"../../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<link href=\"stylesheet-jdiff.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<noscript>");
+            writeText("<style type=\"text/css\">");
+            writeText("body{overflow:auto;}");
+            writeText("#body-content{position:relative; top:0;}");
+            writeText("#doc-content{overflow:visible;border-left:3px solid #666;}");
+            writeText("#side-nav{padding:0;}");
+            writeText("#side-nav .toggle-list ul {display:block;}");
+            writeText("#resize-packages-nav{border-bottom:3px solid #666;}");
+            writeText("</style>");
+            writeText("</noscript>");
+            writeText("<style type=\"text/css\">");
+            writeText("</style>");
+	    } else {
+            writeText("<link href=\"../../../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<link href=\"../stylesheet-jdiff.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<noscript>");
+            writeText("<style type=\"text/css\">");
+            writeText("body{overflow:auto;}");
+            writeText("#body-content{position:relative; top:0;}");
+            writeText("#doc-content{overflow:visible;border-left:3px solid #666;}");
+            writeText("#side-nav{padding:0;}");
+            writeText("#side-nav .toggle-list ul {display:block;}");
+            writeText("#resize-packages-nav{border-bottom:3px solid #666;}");
+            writeText("</style>");
+            writeText("</noscript>");
+            writeText("<style type=\"text/css\">");
+            writeText("</style>");
+	    }
     }
 
     /** Write the HTML footer. */
     public void writeHTMLFooter() {
-    writeText("<script src=\"http://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
-    writeText("</script>");
-    writeText("<script type=\"text/javascript\">");
-    writeText("  try {");
-    writeText("    var pageTracker = _gat._getTracker(\"UA-18071-1\");");
-    writeText("    pageTracker._setAllowAnchor(true);");
-    writeText("    pageTracker._initData();");
-    writeText("    pageTracker._trackPageview();");
-    writeText("  } catch(e) {}");
-    writeText("</script>");
-    writeText("</BODY>");
-    writeText("</HTML>");
+        writeText("<script src=\"https://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
+        writeText("</script>");
+        writeText("<script type=\"text/javascript\">");
+        writeText("  try {");
+        writeText("    var pageTracker = _gat._getTracker(\"UA-5831155-1\");");
+        writeText("    pageTracker._setAllowAnchor(true);");
+        writeText("    pageTracker._initData();");
+        writeText("    pageTracker._trackPageview();");
+        writeText("  } catch(e) {}");
+        writeText("</script>");
+        writeText("</BODY>");
+        writeText("</HTML>");
     }
 
-    /** 
-     * Write a section header, which includes a navigation bar. 
-     * 
+    /**
+     * Write a section header, which includes a navigation bar.
+     *
      * @param title Title of the header. Contains any links necessary.
-     * @param packageName The name of the current package, with no slashes or 
+     * @param packageName The name of the current package, with no slashes or
      *                    links in it. May be null
-     * @param prevElemLink An HTML link to the previous element (a package or 
+     * @param prevElemLink An HTML link to the previous element (a package or
      *                     class). May be null.
-     * @param nextElemLink An HTML link to the next element (a package or 
+     * @param nextElemLink An HTML link to the next element (a package or
      *                     class). May be null.
-     * @param className The name of the current class, with no slashes or 
+     * @param className The name of the current class, with no slashes or
      *                  links in it. May be null.
      * @param level 0 = overview, 1 = package, 2 = class/interface
      */
@@ -817,45 +824,39 @@ public class HTMLReportGenerator {
      *                  links in it. May be null
      * @param level 0 = overview, 1 = package, 2 = class/interface
      */
-    public void writeSectionFooter(String packageName, 
+    public void writeSectionFooter(String packageName,
                                    String prevElemLink, String nextElemLink,
                                    String className, int level) {
-            writeText("</div><!-- end codesitecontent -->");
-            writeText("<div style=\"padding-left: 10px; padding-right: 10px; margin-top: 0; padding-bottom: 15px;\">");
-            writeText("  <table style=\"width: 100%; border: none;\"><tr>");
-            writeText("    <td style=\"text-align:center;font-size: 10pt; border: none; color: ccc;\"> ");
-            writeText("      <span>&copy;2008 Google - ");
-            writeText("            <a href=\"http://code.google.com\">Code Home</a> - ");
-            writeText("            <a href=\"http://www.google.com/accounts/TOS\">Site Terms of Service</a> - "); 
-            writeText("            <a href=\"http://www.google.com/privacy.html\">Privacy Policy</a> ");
-            writeText("      </span>");
-            writeText("      <div style=\"xborder:1px solid red;position:relative;margin-top:-2em;" );
-            writeText("        font-size:8pt;color:aaa;text-align:right;\">");
-            writeText("        <em>Generated by <a href=\"http://www.jdiff.org/\">JDiff</a></em><br><img ");
-            writeText("        align=\"right\" src=\"../../../assets/jdiff_logo.gif\">");
-            writeText("      </span>");
-            writeText("    </td>");
-            writeText(" </tr></table>");
-            writeText("</div>");
-            writeText("</div><!-- end gc-containter -->");
-/*
-        reportFile.println("<HR>");
-        writeNavigationBar(packageName, prevElemLink, nextElemLink, 
-                           className, level, false,
-                           false, false, false);
-*/
+        writeText("      </div>	");
+        writeText("      <div id=\"footer\">");
+        writeText("        <div id=\"copyright\">");
+        writeText("        Except as noted, this content is licensed under ");
+        writeText("        <a href=\"https://creativecommons.org/licenses/by/2.5/\"> Creative Commons Attribution 2.5</a>.");
+        writeText("        For details and restrictions, see the <a href=\"https://developer.android.com/license.html\">Content License</a>.");
+        writeText("        </div>");
+        writeText("      <div id=\"footerlinks\">");
+        writeText("      <p>");
+        writeText("        <a href=\"https://www.android.com/terms.html\">Site Terms of Service</a> -");
+        writeText("        <a href=\"https://www.android.com/privacy.html\">Privacy Policy</a> -");
+        writeText("        <a href=\"https://www.android.com/branding.html\">Brand Guidelines</a>");
+        writeText("      </p>");
+        writeText("    </div>");
+        writeText("    </div> <!-- end footer -->");
+        writeText("    </div><!-- end doc-content -->");
+        writeText("    </div> <!-- end body-content --> ");
+
     }
-   
-    /** 
-     * Write a navigation bar section header. 
-     * 
-     * @param pkgName The name of the current package, with no slashes or 
+
+    /**
+     * Write a navigation bar section header.
+     *
+     * @param pkgName The name of the current package, with no slashes or
      *                links in it.
-     * @param prevElemLink An HTML link to the previous element (a package or 
+     * @param prevElemLink An HTML link to the previous element (a package or
      *                     class). May be null.
-     * @param nextElemLink An HTML link to the next element (a package or 
+     * @param nextElemLink An HTML link to the next element (a package or
      *                     class). May be null.
-     * @param className The name of the current class, with no slashes or 
+     * @param className The name of the current class, with no slashes or
      *                links in it. May be null.
      * @param level 0 = overview, 1 = package, 2 = class/interface
      */
@@ -864,250 +865,70 @@ public class HTMLReportGenerator {
                                    String prevElemLink, String nextElemLink,
                                    String className, int level,
                                    boolean upperNavigationBar,
-                                   boolean hasRemovals, boolean hasAdditions, 
+                                   boolean hasRemovals, boolean hasAdditions,
                                    boolean hasChanges) {
 
-            String oldAPIName = "Old API";
-            if (apiDiff.oldAPIName_ != null)
-                oldAPIName = apiDiff.oldAPIName_;
-            String newAPIName = "New API";
-            if (apiDiff.newAPIName_ != null)
-                newAPIName = apiDiff.newAPIName_;
+        String oldAPIName = "Old API";
+        if (apiDiff.oldAPIName_ != null)
+            oldAPIName = apiDiff.oldAPIName_;
+        String newAPIName = "New API";
+        if (apiDiff.newAPIName_ != null)
+            newAPIName = apiDiff.newAPIName_;
 
-            SimpleDateFormat formatter
-              = new SimpleDateFormat ("yyyy.MM.dd HH:mm");
-            Date day = new Date();
+        SimpleDateFormat formatter
+          = new SimpleDateFormat ("yyyy.MM.dd HH:mm");
+        Date day = new Date();
 
 	    reportFile.println("<!-- Start of nav bar -->");
 
-	    reportFile.println("<div id=\"gc-container\" style=\"padding-left:1em;padding-right:1em;\" id=\"pagecontent\">");
 	    reportFile.println("<a name=\"top\"></a>");
-	    reportFile.println("<div id=\"gc-header\">");
-	    reportFile.println("  <div id=\"logo\"  style=\"padding-left:1em;\">");
-	    reportFile.println("    <a href=\"../../../documentation.html\" target=\"_top\"><img style=\"border: 0;\" src=\"../../../assets-google/android-logo-sm.gif\" \"/></a>");
-	    reportFile.println("  </div> <!-- End logo -->");
-	    reportFile.println("  <div class=\"and-diff-id\">");
-            reportFile.println("    <table class=\"diffspectable\">");
+	    reportFile.println("<div id=\"header\" style=\"margin-bottom:0;padding-bottom:0;\">");
+	    reportFile.println("<div id=\"headerLeft\">");
+	    reportFile.println("<a href=\"../../../../index.html\" tabindex=\"-1\" target=\"_top\"><img src=\"../../../../assets/images/bg_logo.png\" alt=\"Android Developers\" /></a>");
+	    reportFile.println("</div>");
+	    reportFile.println("  <div id=\"headerRight\">");
+	    reportFile.println("  <div id=\"headerLinks\">");
+        reportFile.println("<!-- <img src=\"/assets/images/icon_world.jpg\" alt=\"\" /> -->");
+	    reportFile.println("<span class=\"text\">");
+	    reportFile.println("<!-- &nbsp;<a href=\"#\">English</a> | -->");
+	    reportFile.println("<nobr><a href=\"https://developer.android.com\" target=\"_top\">Android Developers</a> | <a href=\"https://www.android.com\" target=\"_top\">Android.com</a></nobr>");
+	    reportFile.println("</span>");
+	    reportFile.println("</div>");
+	    reportFile.println("  <div class=\"and-diff-id\" style=\"margin-top:6px;margin-right:8px;\">");
+        reportFile.println("    <table class=\"diffspectable\">");
 	    reportFile.println("      <tr>");
 	    reportFile.println("        <td colspan=\"2\" class=\"diffspechead\">API Diff Specification</td>");
 	    reportFile.println("      </tr>");
 	    reportFile.println("      <tr>");
-	    reportFile.println("        <td class=\"diffspec\" style=\"padding-top:.25em\">To Version:</td>");
+	    reportFile.println("        <td class=\"diffspec\" style=\"padding-top:.25em\">To Level:</td>");
 	    reportFile.println("        <td class=\"diffvaluenew\" style=\"padding-top:.25em\">" + newAPIName + "</td>");
 	    reportFile.println("      </tr>");
 	    reportFile.println("      <tr>");
-	    reportFile.println("        <td class=\"diffspec\">From Version:</td>");
+	    reportFile.println("        <td class=\"diffspec\">From Level:</td>");
 	    reportFile.println("        <td class=\"diffvalueold\">" + oldAPIName + "</td>");
 	    reportFile.println("      </tr>");
-//	    reportFile.println("      <tr>");
-//	    reportFile.println("        <td class=\"diffspec\">Product Type:</td>");
-//	    reportFile.println("        <td class=\"diffvalue\">Generic</td>");
-//	    reportFile.println("      </tr>");
 	    reportFile.println("      <tr>");
 	    reportFile.println("        <td class=\"diffspec\">Generated</td>");
 	    reportFile.println("        <td class=\"diffvalue\">" + formatter.format( day ) + "</td>");
 	    reportFile.println("      </tr>");
  	    reportFile.println("    </table>");
-	    reportFile.println("  </div> <!-- End and-diff-id -->");
-
-            if (doStats) {
-	    	reportFile.println("  <div class=\"and-diff-id\">");
+ 	    reportFile.println("    </div><!-- End and-diff-id -->");
+        if (doStats) {
+	    	reportFile.println("  <div class=\"and-diff-id\" style=\"margin-right:8px;\">");
 	    	reportFile.println("    <table class=\"diffspectable\">");
 	    	reportFile.println("      <tr>");
-	    	reportFile.println("        <td class=\"diffspec\" colspan=\"2\"><a href=\"jdiff_statistics.html\">Statistics</a></div>");
+	    	reportFile.println("        <td class=\"diffspec\" colspan=\"2\"><a href=\"jdiff_statistics.html\">Statistics</a>");
 	    	reportFile.println("      </tr>");
  	    	reportFile.println("    </table>");
 	    	reportFile.println("  </div> <!-- End and-diff-id -->");
 	    }
-
-	    reportFile.println("</div> <!-- End gc-header -->");
-	    reportFile.println("<div id=\"codesiteContent\" style=\"margin-top: 70px;margin-bottom:80px;\">");
-
-/*
-	reportFile.println("<TABLE summary=\"Navigation bar\" BORDER=\"0\" WIDTH=\"100%\" CELLPADDING=\"1\" CELLSPACING=\"0\">");
-        reportFile.println("  <TR>");
-        reportFile.println("    <TD COLSPAN=2 BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\">");
-        reportFile.println("    <TABLE summary=\"Navigation bar\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"3\">");
-        reportFile.println("    <TR ALIGN=\"center\" VALIGN=\"top\">");
-        boolean atOverview = (level == 0);
-        boolean atPackage = (level == 1);
-        boolean atClass = (level == 2);
-
-        // Always have a link to the Javadoc files
-        if (atOverview) {
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + newDocPrefix + "index.html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><font size=\"+1\"><tt>" + apiDiff.newAPIName_ + "</tt></font></B></FONT></A>&nbsp;</TD>");
-        } else if (atPackage) {
-            String pkgRef = pkgName;
-            pkgRef = pkgRef.replace('.', '/');
-            pkgRef = newDocPrefix + pkgRef + "/package-summary";
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + pkgRef + ".html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><font size=\"+1\"><tt>" + apiDiff.newAPIName_ + "</tt></font></B></FONT></A>&nbsp;</TD>");
-        } else if (atClass) {
-            String classRef = pkgName + "." + className;
-            classRef = classRef.replace('.', '/');
-            if (className.indexOf('.') != -1) {
-                classRef = pkgName + ".";
-                classRef = classRef.replace('.', '/');
-                classRef = newDocPrefix + classRef + className;
-            } else {
-                classRef = newDocPrefix + classRef;
-            }
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + classRef + ".html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><font size=\"+1\"><tt>" + apiDiff.newAPIName_ + "</tt></font></B></FONT></A>&nbsp;</TD>");
-        }
-
-        if (atOverview) {
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1Rev\"> &nbsp;<FONT CLASS=\"NavBarFont1Rev\"><B>Overview</B></FONT>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Package</FONT>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>");
-        }
-
-        String changesSummaryName = reportFileName + "-summary" + reportFileExt;
-        if (atPackage) {
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + changesSummaryName + "\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1Rev\"> &nbsp;<FONT CLASS=\"NavBarFont1Rev\"><B>Package</B></FONT>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>");
-        }
-        if (atClass) {
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + changesSummaryName + "\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"pkg_" + pkgName + reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Package</B></FONT></A>&nbsp;</TD>");
-            reportFile.println("      <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1Rev\"> &nbsp;<FONT CLASS=\"NavBarFont1Rev\"><B>Class</B></FONT>&nbsp;</TD>");
-        }
-
-        if (!Diff.noDocDiffs) {
-            if (atPackage) {
-                String id = (String)Diff.firstDiffOutput.get(pkgName + "!package");
-                if (id != null)
-                    reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + Diff.diffFileName + "index" + reportFileExt  + "#" + id + "\"><FONT CLASS=\"NavBarFont1\"><B>Text Changes</B></FONT></A>&nbsp;</TD>");
-                else
-                    reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <FONT CLASS=\"NavBarFont1\">Text Changes</FONT>&nbsp;</TD>");
-            } else if (atClass) {
-                String id = (String)Diff.firstDiffOutput.get(pkgName + "." + className + "!class");
-                if (id != null)
-                    reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + Diff.diffFileName + "index" + reportFileExt  + "#" + id + "\"><FONT CLASS=\"NavBarFont1\"><B>Text Changes</B></FONT></A>&nbsp;</TD>");
-                else
-                    reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <FONT CLASS=\"NavBarFont1\">Text Changes</FONT>&nbsp;</TD>");
-            } else {
-                reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + Diff.diffFileName + "index" + reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Text Changes</B></FONT></A>&nbsp;</TD>");
-            }
-        }
-
-        if (doStats) {
-            reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"jdiff_statistics" + reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Statistics</B></FONT></A>&nbsp;</TD>");
-        }
-
-        // Always have a link to the JDiff help file
-        reportFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"jdiff_help" + reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Help</B></FONT></A>&nbsp;</TD>");
-        reportFile.println("    </TR>");
-        reportFile.println("    </TABLE>");
-        reportFile.println("  </TD>");
-
-        // The right hand side title, only added at the top
-        if (upperNavigationBar) {
-            reportFile.println("  <TD ALIGN=\"right\" VALIGN=\"top\" ROWSPAN=3><EM><b>Generated by<br><a href=\"" + JDiff.jDiffLocation + "\" class=\"staysblack\" target=\"_top\">JDiff</a></b></EM></TD>");
-        } else {
-            reportFile.println("  <TD ALIGN=\"right\" VALIGN=\"top\" ROWSPAN=3></TD>");
-        }
-        reportFile.println("</TR>");
-
-        // Links for frames and no frames
-        reportFile.println("<TR>");
-
-        // All of the previous and next links, and the frames and non-frames 
-        // links are in one table cell
-        reportFile.println("  <TD BGCOLOR=\"" + bgcolor + "\" CLASS=\"NavBarCell2\"><FONT SIZE=\"-2\">");        
-        // Display links to the previous and next packages or classes
-        if (atPackage || atClass) {
-            String elemName = "CLASS";
-            if (className == null) {
-                elemName = "PACKAGE";
-            }
-            if (prevElemLink == null) {
-                reportFile.println("&nbsp;<B>PREV " + elemName + "</B>&nbsp;");
-            } else {
-                reportFile.println("&nbsp;<A HREF=\"" + prevElemLink + "\"><B>PREV " + elemName + "</B></A>");
-            }
-            if (nextElemLink == null) {
-                reportFile.println("&nbsp;<B>NEXT " + elemName + "</B>&nbsp;");
-            } else {
-                reportFile.println("&nbsp;<A HREF=\"" + nextElemLink + "\"><B>NEXT " + elemName + "</B></A>");
-            }
-            reportFile.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        } else {
-            reportFile.println("  &nbsp;&nbsp;");        
-        }
-        // Links for frames and non-frames.
-        reportFile.println("  <A HREF=\"" + "../" + reportFileName + reportFileExt + "\" TARGET=\"_top\"><B>FRAMES</B></A>  &nbsp;");
-        if (className == null) {
-            if (level == 0) {
-                reportFile.println("  &nbsp;<A HREF=\"" + pkgName + reportFileExt + "\" TARGET=\"_top\"><B>NO FRAMES</B></A></FONT></TD>");
-            } else {
-                reportFile.println("  &nbsp;<A HREF=\"pkg_" + pkgName + reportFileExt + "\" TARGET=\"_top\"><B>NO FRAMES</B></A></FONT></TD>");
-            }
-        } else {
-            reportFile.println("  &nbsp;<A HREF=\"" + pkgName + "." + className + reportFileExt + "\" TARGET=\"_top\"><B>NO FRAMES</B></A></FONT></TD>");
-        }
-
-        // All of the details links are in one table cell
-        if (atClass) {
-            // Links to a class page's sections
-            // The meaning of these three variable is overloaded
-            boolean hasCtors = hasRemovals; 
-            boolean hasMethods = hasAdditions; 
-            boolean hasFields = hasChanges; 
-            if (hasCtors || hasMethods || hasFields) {
-                reportFile.println("  <TD BGCOLOR=\"" + bgcolor + "\" CLASS=\"NavBarCell3\"><FONT SIZE=\"-2\"> DETAIL: &nbsp;");
-                if (hasCtors) {
-                    reportFile.println("<a href=\"#constructors\">CONSTRUCTORS</a>&nbsp;|&nbsp;");
-                } else {
-                    reportFile.println("CONSTRUCTORS&nbsp;|&nbsp;");
-                }
-                if (hasMethods) {
-                    reportFile.println("<a href=\"#methods\">METHODS</a>&nbsp;|&nbsp;");
-                } else {
-                    reportFile.println("METHODS&nbsp;|&nbsp;");
-                }
-                if (hasFields) {
-                    reportFile.println("<a href=\"#fields\">FIELDS</a>");
-                } else {
-                    reportFile.println("FIELDS");
-                }
-                reportFile.println("  </FONT></TD>");
-            } else {
-                // Make the end of the table line match the length of the top
-                reportFile.println("<TD BGCOLOR=\"0xFFFFFF\" CLASS=\"NavBarCell3\"></TD>"); 
-            }
-        } else {
-            // Links to a package page's sections
-            if (hasRemovals || hasAdditions || hasChanges) {
-                reportFile.println("  <TD BGCOLOR=\"" + bgcolor + "\" CLASS=\"NavBarCell3\"><FONT SIZE=\"-2\"> DETAIL: &nbsp;");
-                if (hasRemovals) {
-                    reportFile.println("<a href=\"#Removed\">REMOVED</a>&nbsp;|&nbsp;");
-                } else {
-                    reportFile.println("REMOVED&nbsp;|&nbsp;");
-                }
-                if (hasAdditions) {
-                    reportFile.println("<a href=\"#Added\">ADDED</a>&nbsp;|&nbsp;");
-                } else {
-                    reportFile.println("ADDED&nbsp;|&nbsp;");
-                }
-                if (hasChanges) {
-                    reportFile.println("<a href=\"#Changed\">CHANGED</a>");
-                } else {
-                    reportFile.println("CHANGED");
-                }
-                reportFile.println("  </FONT></TD>");
-            } else {
-                // Make the end of the table line match the length of the top
-                reportFile.println("<TD BGCOLOR=\"0xFFFFFF\" CLASS=\"NavBarCell3\"></TD>"); 
-            }
-        }
-
-        reportFile.println("</TR>");
-        reportFile.println("</TABLE>");
-        reportFile.println("<HR>");
-        reportFile.println("<!-- End of nav bar -->");
-*/
+	    reportFile.println("  </div> <!-- End headerRight -->");
+	    reportFile.println("  </div> <!-- End header -->");
+	    reportFile.println("<div id=\"body-content\" xstyle=\"padding:12px;padding-right:18px;\">");
+	    reportFile.println("<div id=\"doc-content\" style=\"position:relative;\">");
+	    reportFile.println("<div id=\"mainBodyFluid\">");
     }
-    
+
     /** Write the start of a table. */
     public void writeTableStart(String title, int colSpan) {
         reportFile.println("<p>");
@@ -1169,10 +990,10 @@ public class HTMLReportGenerator {
                 pkgRef = oldDocPrefix + pkgRef + "/package-summary";
             else
                 pkgRef = newDocPrefix + pkgRef + "/package-summary";
-            reportFile.println("  <nobr><A HREF=\"" + pkgRef + ".html\" target=\"_top\"><font size=\"+1\"><tt>" + pkgName + "</tt></font></A></nobr>");
+            reportFile.println("  <nobr><A HREF=\"" + pkgRef + ".html\" target=\"_top\"><code>" + pkgName + "</code></A></nobr>");
         } else if (linkType == 2) {
             reportFile.println("  <nobr><A HREF=\"pkg_" + pkgName + reportFileExt + "\">" + pkgName + "</A></nobr>");
-        } 
+        }
         if (!useOld) {
             reportFile.println("  </TD>");
             emitComment(pkgName, possibleComment, linkType);
@@ -1225,12 +1046,12 @@ public class HTMLReportGenerator {
                 else
                     classRef = newDocPrefix + classRef;
             }
-            reportFile.print("  <nobr><A HREF=\"" + classRef + ".html\" target=\"_top\"><font size=\"+1\"><tt>");
+            reportFile.print("  <nobr><A HREF=\"" + classRef + ".html\" target=\"_top\"><code>");
             if (isInterface)
                 reportFile.print("<I>" + shownClassName + "</I>");
             else
                 reportFile.print(shownClassName);
-            reportFile.println("</tt></font></A></nobr>");
+            reportFile.println("</code></A></nobr>");
         } else if (linkType == 2) {
             reportFile.print("  <nobr><A HREF=\"" + fqName + reportFileExt + "\">");
             if (isInterface)
@@ -1238,7 +1059,7 @@ public class HTMLReportGenerator {
             else
                 reportFile.print(shownClassName);
             reportFile.println("</A></nobr>");
-        } 
+        }
         if (!useOld) {
             reportFile.println("  </TD>");
             emitComment(fqName, possibleComment, linkType);
@@ -1269,12 +1090,12 @@ public class HTMLReportGenerator {
         if (linkType == 0) {
             if (oldDocPrefix == null) {
                 // No link
-                reportFile.print("  <nobr>" + pkgName);
+                reportFile.print("  <nobr>" + className);
                 emitTypeWithParens(shortType);
                 reportFile.println("</nobr>");
             } else {
-                writeCtorTableEntry(pkgName, className, 
-                                    type, 1, 
+                writeCtorTableEntry(pkgName, className,
+                                    type, 1,
                                     possibleComment, true);
             }
         } else if (linkType == 1) {
@@ -1299,7 +1120,7 @@ public class HTMLReportGenerator {
                 }
             }
             reportFile.print("  <nobr><A HREF=\"" + memberRef + ".html#" + className +
-                             "(" + type + ")\" target=\"_top\"><font size=\"+1\"><tt>" + shownClassName + "</tt></font></A>");
+                             "(" + type + ")\" target=\"_top\"><code>" + shownClassName + "</code></A>");
             emitTypeWithParens(shortType);
             reportFile.println("</nobr>");
         }
@@ -1338,13 +1159,13 @@ public class HTMLReportGenerator {
             newType = "";
         String shortNewType = simpleName(memberDiff.newType_);
         // Constructors have the linked name, then the type in parentheses.
-        reportFile.print("  <nobr><A HREF=\"" + memberRef + ".html#" + className + "(" + newType + ")\" target=\"_top\"><font size=\"+1\"><tt>");
+        reportFile.print("  <nobr><A HREF=\"" + memberRef + ".html#" + className + "(" + newType + ")\" target=\"_top\"><code>");
         reportFile.print(shownClassName);
-        reportFile.print("</tt></font></A>");
+        reportFile.print("</code></A>");
         emitTypeWithParens(shortNewType);
         reportFile.println("  </nobr>");
         reportFile.println("  </TD>");
-        
+
         // Report changes in documentation
         if (reportDocChanges && memberDiff.documentationChange_ != null) {
             String oldMemberRef = null;
@@ -1363,15 +1184,15 @@ public class HTMLReportGenerator {
                 if (oldType.compareTo("void") == 0)
                     oldType = "";
             }
-            if (oldDocPrefix != null) 
-                memberDiff.documentationChange_ += "<A HREF=\"" + 
-                    oldMemberRef + ".html#" + className + "(" + oldType + 
-                    ")\" target=\"_self\"><font size=\"+1\"><tt>old</tt></font></A> to ";
+            if (oldDocPrefix != null)
+                memberDiff.documentationChange_ += "<A HREF=\"" +
+                    oldMemberRef + ".html#" + className + "(" + oldType +
+                    ")\" target=\"_self\"><code>old</code></A> to ";
             else 
-                memberDiff.documentationChange_ += "<font size=\"+1\"><tt>old</tt></font> to ";
-            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef + 
-                ".html#" + className + "(" + newType + 
-                ")\" target=\"_self\"><font size=\"+1\"><tt>new</tt></font></A>.<br>";
+                memberDiff.documentationChange_ += "<font size=\"+1\"><code>old</code></font> to ";
+            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef +
+                ".html#" + className + "(" + newType +
+                ")\" target=\"_self\"><code>new</code></A>.<br>";
         }
 
         emitChanges(memberDiff, 0);
@@ -1380,8 +1201,8 @@ public class HTMLReportGenerator {
         reportFile.println("</TR>");
     }
 
-    /** 
-     * Write a table entry for a method. 
+    /**
+     * Write a table entry for a method.
      *
      * linkType: 0 - no link by default, 1 = link to Javadoc HTML file
      */
@@ -1442,7 +1263,7 @@ public class HTMLReportGenerator {
             reportFile.print("  <nobr>");
             emitType(shortReturnType);
             reportFile.print("&nbsp;<A HREF=\"" + memberRef + ".html#" + methodName +
-               "(" + signature + ")\" target=\"_top\"><font size=\"+1\"><tt>" + methodName + "</tt></font></A>");
+               "(" + signature + ")\" target=\"_top\"><code>" + methodName + "</code></A>");
             emitTypeWithParens(shortSignature);
             reportFile.println("</nobr>");
         }
@@ -1484,23 +1305,23 @@ public class HTMLReportGenerator {
             memberDiff.modifiersChange_ != null &&
             memberDiff.modifiersChange_.indexOf("but is now inherited from") != -1) {
             memberRef = memberDiff.inheritedFrom_;
-            memberRef = memberRef.replace('.', '/'); 
+            memberRef = memberRef.replace('.', '/');
             memberRef = newDocPrefix + memberRef;
         }
-        
+
         String newReturnType = memberDiff.newType_;
-        String shortReturnType = simpleName(newReturnType); 
-        String shortSignature = simpleName(newSignature);        
+        String shortReturnType = simpleName(newReturnType);
+        String shortSignature = simpleName(newSignature);
         reportFile.print("  <nobr>");
-        emitTypeWithNoParens(shortReturnType); 
-        reportFile.print("&nbsp;<A HREF=\"" + memberRef + ".html#" + 
-                         memberName + "(" + newSignature + ")\" target=\"_top\"><font size=\"+1\"><tt>");
+        emitTypeWithNoParens(shortReturnType);
+        reportFile.print("&nbsp;<A HREF=\"" + memberRef + ".html#" +
+                         memberName + "(" + newSignature + ")\" target=\"_top\"><code>");
         reportFile.print(memberName);
-        reportFile.print("</tt></font></A>");
+        reportFile.print("</code></A>");
         emitTypeWithParens(shortSignature);
         reportFile.println("  </nobr>");
         reportFile.println("  </TD>");
-        
+
         // Report changes in documentation
         if (reportDocChanges && memberDiff.documentationChange_ != null) {
             String oldMemberRef = null;
@@ -1517,15 +1338,15 @@ public class HTMLReportGenerator {
                 }
                 oldSignature = memberDiff.oldSignature_;
             }
-            if (oldDocPrefix != null) 
-                memberDiff.documentationChange_ += "<A HREF=\"" + 
-                    oldMemberRef + ".html#" + memberName + "(" + 
-                    oldSignature + ")\" target=\"_self\"><font size=\"+1\"><tt>old</tt></font></A> to ";
+            if (oldDocPrefix != null)
+                memberDiff.documentationChange_ += "<A HREF=\"" +
+                    oldMemberRef + ".html#" + memberName + "(" +
+                    oldSignature + ")\" target=\"_self\"><code>old</code></A> to ";
             else
-                memberDiff.documentationChange_ += "<font size=\"+1\"><tt>old</tt></font> to ";
-            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef + 
-                ".html#" + memberName + "(" + newSignature + 
-                ")\" target=\"_self\"><font size=\"+1\"><tt>new</tt></font></A>.<br>";
+                memberDiff.documentationChange_ += "<code>old</code> to ";
+            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef +
+                ".html#" + memberName + "(" + newSignature +
+                ")\" target=\"_self\"><code>new</code></A>.<br>";
         }
 
         emitChanges(memberDiff, 1);
@@ -1534,7 +1355,7 @@ public class HTMLReportGenerator {
             int parentIdx = memberDiff.modifiersChange_.indexOf("now inherited from");
             if (parentIdx != -1) {
                 // Change the commentID to pick up the appropriate method
-                commentID = memberDiff.inheritedFrom_ + "." + memberName + 
+                commentID = memberDiff.inheritedFrom_ + "." + memberName +
                     "_changed(" + newSignature + ")";
             }
         }
@@ -1597,19 +1418,19 @@ public class HTMLReportGenerator {
             reportFile.print("  <nobr>");
             emitType(shortFieldType);
             reportFile.println("&nbsp;<A HREF=\"" + memberRef + ".html#" + fieldName +
-               "\" target=\"_top\"><font size=\"+1\"><tt>" + fieldName + "</tt></font></A></nobr>");
+               "\" target=\"_top\"><code>" + fieldName + "</code></A></nobr>");
         }
         if (!useOld) {
             reportFile.println("  </TD>");
             emitComment(commentID, possibleComment, linkType);
             reportFile.println("</TR>");
         }
-        }
+    }
 
-    /** 
+    /**
      * Write a table entry for a changed field.
      */
-    public void writeFieldChangedTableEntry(String pkgName, String className, 
+    public void writeFieldChangedTableEntry(String pkgName, String className,
                                             MemberDiff memberDiff) {
         String memberName = memberDiff.name_;
         // Generally nowhere to break a member name anyway
@@ -1637,20 +1458,20 @@ public class HTMLReportGenerator {
             memberDiff.modifiersChange_ != null &&
             memberDiff.modifiersChange_.indexOf("but is now inherited from") != -1) {
             memberRef = memberDiff.inheritedFrom_;
-            memberRef = memberRef.replace('.', '/'); 
+            memberRef = memberRef.replace('.', '/');
             memberRef = newDocPrefix + memberRef;
         }
 
         String newType = memberDiff.newType_;
-        String shortNewType = simpleName(newType); 
+        String shortNewType = simpleName(newType);
         reportFile.print("  <nobr>");
         emitTypeWithNoParens(shortNewType);
-        reportFile.print("&nbsp;<A HREF=\"" + memberRef + ".html#" + 
-                         memberName + "\" target=\"_top\"><font size=\"+1\"><tt>");
+        reportFile.print("&nbsp;<A HREF=\"" + memberRef + ".html#" +
+                         memberName + "\" target=\"_top\"><code>");
         reportFile.print(memberName);
-        reportFile.print("</tt></font></A></nobr>");
+        reportFile.print("</code></font></A></nobr>");
         reportFile.println("  </TD>");
-        
+
         // Report changes in documentation
         if (reportDocChanges && memberDiff.documentationChange_ != null) {
             String oldMemberRef = null;
@@ -1665,13 +1486,13 @@ public class HTMLReportGenerator {
                     oldMemberRef = oldDocPrefix + oldMemberRef;
                 }
             }
-            if (oldDocPrefix != null) 
-                memberDiff.documentationChange_ += "<A HREF=\"" + 
-                    oldMemberRef + ".html#" + memberName + "\" target=\"_self\"><font size=\"+1\"><tt>old</tt></font></A> to ";
+            if (oldDocPrefix != null)
+                memberDiff.documentationChange_ += "<A HREF=\"" +
+                    oldMemberRef + ".html#" + memberName + "\" target=\"_self\"><code>old</code></A> to ";
             else
-                memberDiff.documentationChange_ += "<font size=\"+1\"><tt>old</tt></font> to ";
-            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef + 
-                ".html#" + memberName + "\" target=\"_self\"><font size=\"+1\"><tt>new</tt></font></A>.<br>";
+                memberDiff.documentationChange_ += "<code>old</code> to ";
+            memberDiff.documentationChange_ += "<A HREF=\"" + memberRef +
+                ".html#" + memberName + "\" target=\"_self\"><code>new</code></A>.<br>";
         }
 
         emitChanges(memberDiff, 2);
@@ -1902,14 +1723,14 @@ public class HTMLReportGenerator {
                     if (sepType == null)
                         sepType = p;
                     else
-                        sepType += ",</nobr> " + p + "<nobr>";                        
+                        sepType += ",</nobr> " + p + "<nobr>";
                 }
                 reportFile.print("(<code>" + sepType + "<nobr></code>)");
             }
         }
     }
 
-    /** 
+    /**
      * Emit a string which is a type by surrounding it with &lt;code&gt; tags.
      * Do not surround it with parentheses. Used to display methods' return
      * types and field types.
@@ -2106,20 +1927,20 @@ public class HTMLReportGenerator {
      */
     public static boolean noCommentsOnChanges = false;
 
-    /** 
-     * If set, then report changes in documentation (Javadoc comments) 
+    /**
+     * If set, then report changes in documentation (Javadoc comments)
      * between the old and the new API. The default is that this is not set.
      */
     public static boolean reportDocChanges = false;
 
-    /** 
+    /**
      * Define the prefix for HTML links to the existing set of Javadoc-
      * generated documentation for the new API. E.g. For J2SE1.3.x, use
-     * "http://java.sun.com/j2se/1.3/docs/api/"
+     * "https://java.sun.com/j2se/1.3/docs/api/"
      */
     public static String newDocPrefix = "../";
 
-    /** 
+    /**
      * Define the prefix for HTML links to the existing set of Javadoc-
      * generated documentation for the old API.
      */

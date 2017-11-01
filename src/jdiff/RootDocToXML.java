@@ -82,7 +82,7 @@ public class RootDocToXML {
 	    }
 	} else {
 	    xsdFileName = outputDirectory;
-	    if (!xsdFileName.endsWith(JDiff.DIR_SEP)) 
+	    if (!xsdFileName.endsWith(JDiff.DIR_SEP))
 		 xsdFileName += JDiff.DIR_SEP;
 	}
         xsdFileName += "api.xsd";
@@ -91,7 +91,7 @@ public class RootDocToXML {
             PrintWriter xsdFile = new PrintWriter(fos);
             // The contents of the api.xsd file
             xsdFile.println("<?xml version=\"1.0\" encoding=\"iso-8859-1\" standalone=\"no\"?>");
-            xsdFile.println("<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+            xsdFile.println("<xsd:schema xmlns:xsd=\"https://www.w3.org/2001/XMLSchema\">");
             xsdFile.println("");
             xsdFile.println("<xsd:annotation>");
             xsdFile.println("  <xsd:documentation>");
@@ -770,16 +770,16 @@ public class RootDocToXML {
             int val = Character.getNumericValue(c);
 //            if (s.indexOf("which is also a test for non-printable") != -1)
 //                System.out.println("** Char " + i + "[" + c + "], val =" + val); //DEBUG
-            // Ranges from http://www.unicode.org/unicode/reports/tr20/
+            // Ranges from https://www.unicode.org/unicode/reports/tr20/
             // Should really replace 0x2028 and  0x2029 with <br/>
             if (val == 0x0 ||
-                inRange(val, 0x2028, 0x2029) || 
-                inRange(val, 0x202A, 0x202E) || 
-                inRange(val, 0x206A, 0x206F) || 
-                inRange(val, 0xFFF9, 0xFFFC) || 
+                inRange(val, 0x2028, 0x2029) ||
+                inRange(val, 0x202A, 0x202E) ||
+                inRange(val, 0x206A, 0x206F) ||
+                inRange(val, 0xFFF9, 0xFFFC) ||
                 inRange(val, 0xE0000, 0xE007F)) {
                 if (trace) {
-                    System.out.println("Warning: changed non-printing character  " + sa[i] + " in " + doc.name()); 
+                    System.out.println("Warning: changed non-printing character  " + sa[i] + " in " + doc.name());
                 }
                 sa[i] = '#';
             }
@@ -1110,31 +1110,31 @@ public class RootDocToXML {
      */
     public static boolean doExclude = false;
 
-    /** 
+    /**
      * Exclude program elements marked with this String, e.g. "@exclude".
      */
     public static String excludeTag = null;
 
-    /** 
-     * The base URI for locating necessary DTDs and Schemas. By default, this 
-     * is "http://www.w3.org". A typical value to use local copies of DTD files
+    /**
+     * The base URI for locating necessary DTDs and Schemas. By default, this
+     * is "https://www.w3.org". A typical value to use local copies of DTD files
      * might be "file:///C:/jdiff/lib"
      */
-    public static String baseURI = "http://www.w3.org";
+    public static String baseURI = "https://www.w3.org";
 
-    /** 
+    /**
      * If set, then strip out non-printing characters from documentation.
      * Default is that this is set.
      */
     static boolean stripNonPrintables = true;
 
-    /** 
+    /**
      * If set, then add the information about the source file and line number
      * which is available in J2SE1.4. Default is that this is not set.
      */
     static boolean addSrcInfo = false;
 
-    /** 
+    /**
      * If set, scan classes with no packages. 
      * If the source is  a jar file this may duplicates classes, so 
      * disable it using the -packagesonly option. Default is that this is 

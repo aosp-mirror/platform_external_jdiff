@@ -324,7 +324,7 @@ class Diff {
                     diffFile.println("</TITLE>");
                     diffFile.println("</HEAD>");
                     diffFile.println("<BODY>");
-                                        
+
                     // Write the navigation bar
                     diffFile.println("<!-- Start of nav bar -->");
                     diffFile.println("<TABLE summary=\"Navigation bar\" BORDER=\"0\" WIDTH=\"100%\" CELLPADDING=\"1\" CELLSPACING=\"0\">");
@@ -336,7 +336,7 @@ class Diff {
                     String pkgRef = currPkgName;
                     pkgRef = pkgRef.replace('.', '/');
                     pkgRef = HTMLReportGenerator.newDocPrefix + pkgRef + "/package-summary";
-                    diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + pkgRef + ".html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><tt>" + APIDiff.newAPIName_ + "</tt></B></FONT></A>&nbsp;</TD>");
+                    diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + pkgRef + ".html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><code>" + APIDiff.newAPIName_ + "</code></B></FONT></A>&nbsp;</TD>");
                     diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + HTMLReportGenerator.reportFileName + "-summary" + HTMLReportGenerator.reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>");
                     diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Package</FONT>&nbsp;</TD>");
                     diffFile.println("      <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>");
@@ -468,7 +468,7 @@ class Diff {
             diffFile.println("  <TABLE summary=\"Navigation bar\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"3\">");
             diffFile.println("    <TR ALIGN=\"center\" VALIGN=\"top\">");
             // Always have a link to the Javadoc files
-            diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + HTMLReportGenerator.newDocPrefix + "index.html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><tt>" + APIDiff.newAPIName_ + "</tt></B></FONT></A>&nbsp;</TD>");
+            diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + HTMLReportGenerator.newDocPrefix + "index.html\" target=\"_top\"><FONT CLASS=\"NavBarFont1\"><B><code>" + APIDiff.newAPIName_ + "</code></B></FONT></A>&nbsp;</TD>");
             diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> <A HREF=\"" + HTMLReportGenerator.reportFileName + "-summary" + HTMLReportGenerator.reportFileExt + "\"><FONT CLASS=\"NavBarFont1\"><B>Overview</B></FONT></A>&nbsp;</TD>");
             diffFile.println("      <TD BGCOLOR=\"#EEEEFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Package</FONT>&nbsp;</TD>");
             diffFile.println("      <TD BGCOLOR=\"#FFFFFF\" CLASS=\"NavBarCell1\"> &nbsp;<FONT CLASS=\"NavBarFont1\">Class</FONT>&nbsp;</TD>");
@@ -632,23 +632,23 @@ class Diff {
      */
     public static int insertEffect = 1;
 
-    /** 
+    /**
      * For each package and class, the first DiffOutput is added to
      * this hash table. Used when generating navigation bars.
      */
     public static Hashtable firstDiffOutput = new Hashtable();
 
-    /** 
+    /**
      * If set, then show changes in implementation-related modifiers such as
-     * native and synchronized. For more information, see 
-     * http://java.sun.com/j2se/1.4.1/docs/tooldocs/solaris/javadoc.html#generatedapideclarations
+     * native and synchronized. For more information, see
+     * https://java.sun.com/j2se/1.4.1/docs/tooldocs/solaris/javadoc.html#generatedapideclarations
      */
     public static boolean showAllChanges = false;
 
     /** The list of documentation differences. */
     private static List docDiffs = new ArrayList(); // DiffOutput[]
-        
+
     /** Set to enable increased logging verbosity for debugging. */
     private static boolean trace = false;
-        
-}  
+
+}

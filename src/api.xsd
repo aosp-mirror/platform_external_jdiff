@@ -52,6 +52,7 @@
 
 <xsd:complexType name="constructorType">
   <xsd:sequence>
+    <xsd:element name="parameter" type="paramsType" minOccurs='0' maxOccurs='unbounded'/>
     <xsd:element name="exception" type="exceptionType" minOccurs='0' maxOccurs='unbounded'/>
     <xsd:element name="doc" type="xsd:string" minOccurs='0' maxOccurs='1'/>
   </xsd:sequence>
@@ -76,7 +77,7 @@
 
 <xsd:complexType name="methodType">
   <xsd:sequence>
-    <xsd:element name="param" type="paramsType" minOccurs='0' maxOccurs='unbounded'/>
+    <xsd:element name="parameter" type="paramsType" minOccurs='0' maxOccurs='unbounded'/>
     <xsd:element name="exception" type="exceptionType" minOccurs='0' maxOccurs='unbounded'/>
     <xsd:element name="doc" type="xsd:string" minOccurs='0' maxOccurs='1'/>
   </xsd:sequence>

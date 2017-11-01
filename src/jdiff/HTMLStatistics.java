@@ -46,8 +46,8 @@ public class HTMLStatistics {
 
            // writeText("<div class=\"g-section g-tpl-180\">");
            // Add the nav bar for the summary page
-            
-            
+
+
             // Write a customized navigation bar for the statistics page
             h_.writeText("<!-- Start of nav bar -->");
 
@@ -55,113 +55,121 @@ public class HTMLStatistics {
               = new SimpleDateFormat ("yyyy.MM.dd HH:mm");
             Date day = new Date();
 
-	    h_.writeText("<div id=\"gc-container\" style=\"padding-left:1em;padding-right:1em;\">");
 	    h_.writeText("<a name=\"top\"></a>");
-	    h_.writeText("<div id=\"gc-header\">");
-	    h_.writeText("  <div id=\"logo\" style=\"padding-left:1em;\">");
-	    h_.writeText("    <a href=\"../../../documentation.html\" target=\"_top\"><img style=\"border: 0;\" src=\"../../../assets-google/android-logo-sm.gif\" \"/></a>");
-	    h_.writeText("  </div> <!-- End logo -->");
-
-            h_.writeText("<div class=\"and-diff-id\">");
-            h_.writeText("<table class=\"diffspectable\">");
-            h_.writeText("<tr>");
-            h_.writeText("  <td colspan=\"2\" class=\"diffspechead\">API Diff Specification</td>");
-            h_.writeText("</tr>");
+	    h_.writeText("<div id=\"header\" style=\"margin-bottom:0;xborder-bottom:none;\">");
+	    h_.writeText("<div id=\"headerLeft\">");
+	    h_.writeText("<a href=\"../../../../index.html\" tabindex=\"-1\" target=\"_top\"><img src=\"../../../../assets/images/bg_logo.png\" alt=\"Android Developers\" /></a>");
+	    h_.writeText("</div>");
+	    h_.writeText("  <div id=\"headerRight\">");
+	    h_.writeText("  <div id=\"headerLinks\">");
+            h_.writeText("<!-- <img src=\"/assets/images/icon_world.jpg\" alt=\"\" /> -->");
+	    h_.writeText("<span class=\"text\">");
+	    h_.writeText("<!-- &nbsp;<a href=\"#\">English</a> | -->");
+	    h_.writeText("<nobr><a href=\"https://developer.android.com\" target=\"_top\">Android Developers</a> | <a href=\"https://www.android.com\" target=\"_top\">Android.com</a></nobr>");
+	    h_.writeText("</span>");
+	    h_.writeText("</div>");
+	    h_.writeText("  <div class=\"and-diff-id\" style=\"margin-top:6px;margin-right:8px;\">");
+            h_.writeText("    <table class=\"diffspectable\">");
 	    h_.writeText("      <tr>");
-	    h_.writeText("        <td class=\"diffspec\">To Version:</td>");
-	    h_.writeText("        <td class=\"diffvaluenew\">" + newAPIName + "</td>");
+	    h_.writeText("        <td colspan=\"2\" class=\"diffspechead\">API Diff Specification</td>");
 	    h_.writeText("      </tr>");
 	    h_.writeText("      <tr>");
-	    h_.writeText("        <td class=\"diffspec\">From Version:</td>");
+	    h_.writeText("        <td class=\"diffspec\" style=\"padding-top:.25em\">To Level:</td>");
+	    h_.writeText("        <td class=\"diffvaluenew\" style=\"padding-top:.25em\">" + newAPIName + "</td>");
+	    h_.writeText("      </tr>");
+	    h_.writeText("      <tr>");
+	    h_.writeText("        <td class=\"diffspec\">From Level:</td>");
 	    h_.writeText("        <td class=\"diffvalueold\">" + oldAPIName + "</td>");
 	    h_.writeText("      </tr>");
-            h_.writeText("<tr>");
-            h_.writeText("  <td class=\"diffspec\">Generated</td>");
-            h_.writeText("  <td class=\"diffvalue\">" + formatter.format( day ) + "</td>");
-            h_.writeText("</tr>");
-            h_.writeText("</table>");
-	    h_.writeText("  </div> <!-- End and-diff-id -->");
-
-	    h_.writeText("  <div class=\"and-diff-id\">");
-	    h_.writeText("    <table class=\"diffspectable\">");
 	    h_.writeText("      <tr>");
-	    h_.writeText("        <td class=\"diffspec\" colspan=\"2\"><a href=\"../changes.html\" target=\"_top\">Top of Report</a></div>");
+	    h_.writeText("        <td class=\"diffspec\">Generated</td>");
+	    h_.writeText("        <td class=\"diffvalue\">" + formatter.format( day ) + "</td>");
 	    h_.writeText("      </tr>");
  	    h_.writeText("    </table>");
-	    h_.writeText("  </div> <!-- End and-diff-id -->");
+ 	    h_.writeText("    </div><!-- End and-diff-id -->");
 
-	    h_.writeText("</div> <!-- End gc-header -->");
-	    h_.writeText("<div id=\"codesiteContent\" style=\"margin-top: 70px;margin-bottom:80px;\">");
+	    	h_.writeText("  <div class=\"and-diff-id\" style=\"margin-right:8px;\">");
+	    	h_.writeText("    <table class=\"diffspectable\">");
+	    	h_.writeText("      <tr>");
+	    	h_.writeText("        <td class=\"diffspec\" colspan=\"2\"><a href=\"../changes.html\" target=\"_top\">Top of Report</a>");
+	    	h_.writeText("      </tr>");
+ 	    	h_.writeText("    </table>");
+	    	h_.writeText("  </div> <!-- End and-diff-id -->");
 
-            // Write the title in the body with some formatting
-            h_.writeText("<div style=\"xborder:1px solid yellow;vertical-align:top;padding:1em;margin-left:0;text-align:left;\">");
-            h_.writeText(" <H1 class=\"pagecontenth1\">API&nbsp;Change&nbsp;Statistics</H1>");
-            h_.writeText("</div>");
+	    h_.writeText("  </div> <!-- End headerRight -->");
+	    h_.writeText("  </div> <!-- End header -->");
+	    h_.writeText("<div id=\"body-content\">");
+	    h_.writeText("<div id=\"doc-content\" style=\"position:relative;\">");
+	    h_.writeText("<div id=\"mainBodyFluid\">");
+
+            h_.writeText("<h1>API&nbsp;Change&nbsp;Statistics</h1>");
 
 
-            h_.writeText("<p>");
-            h_.writeText("The percent change statistic reported for all elements in each API is defined recursively as follows:</p>");
-            h_.writeText("<pre>"); 
-            h_.writeText("Percentage difference = 100 * (added + removed + 2*changed)");
-            h_.writeText("                        -----------------------------------");
-            h_.writeText("                        sum of public elements in BOTH APIs");
-            h_.writeText("</pre>"); 
-            h_.writeText("<p>where <code>added</code> is the number of packages added, <code>removed</code> is the number of packages removed, and <code>changed</code> is the number of packages changed.");
-            h_.writeText("This definition is applied recursively for the classes and their program elements, so the value for a changed package will be less than 1, unless every class in that package has changed.");
-            h_.writeText("The definition ensures that if all packages are removed and all new packages are");
-            h_.writeText("added, the change will be 100%. Values are rounded here, so a value of 0% indicates a percentage difference of less than 0.5%.</p>");
+            DecimalFormat df2 = new DecimalFormat( "#,###,###,##0.00" );
+            double dd = apiDiff.pdiff;
+            double dd2dec = new Double(df2.format(dd)).doubleValue();
 
-            h_.writeText("<p>The overall difference between the two APIs is approximately <span style=\"color:222;font-weight:bold;\">" + (int)(apiDiff.pdiff) + "%</span>.");
+            h_.writeText("<p>The overall difference between API Levels " + oldAPIName + " and " +  newAPIName + " is approximately <span style=\"color:222;font-weight:bold;\">" + dd2dec + "%</span>.");
             h_.writeText("</p>");
-
-            h_.writeText("<br><h2 class=\"pagecontenth2\">Contents</h2>");
-            h_.writeText("<dl><dt><a href=\"#packages\">Changed Packages</a></dt> <dd>Sorted by percentage difference</dd>");
-            h_.writeText("<dt><a href=\"#classes\">Changed Classes and <i>Interfaces</i></a></dt><dd>Sorted by percentage difference</dd>");
-            h_.writeText("<dt><a href=\"#numbers\">Total of Differences</a></dt><dd>Listed by number and type</dd></dl>");
-
-            h_.writeText("<br>");
-            h_.writeText("<a name=\"packages\"></a>");
-            h_.writeText("<h2 class=\"pagecontenth2\">Changed Packages, Sorted by Percentage Difference</h2>");
-            emitPackagesByDiff(apiDiff);
-
-            h_.writeText("<br>");
-            h_.writeText("<a name=\"classes\"></a>");
-            h_.writeText("<h2 class=\"pagecontenth2\">Changed Classes and <i>Interfaces</i>, Sorted by Percentage Difference</h2>");
-            emitClassesByDiff(apiDiff);
 
             h_.writeText("<br>");
             h_.writeText("<a name=\"numbers\"></a>");
-            h_.writeText("<h2 class=\"pagecontenth2\">Total of Differences, by Number and Type</h2>");
+            h_.writeText("<h2>Total of Differences, by Number and Type</h2>");
             h_.writeText("<p>");
-            h_.writeText("The table below lists the numbers of program elements (packages, classes, constructors, methods, and fields) that were removed, added or changed. The table includes only the highest-level program elements &mdash; that is, if a class with two methods was added, the number of methods added does not include those two methods, but the number of classes added does include that class.");
+            h_.writeText("The table below lists the numbers of program elements (packages, classes, constructors, methods, and fields) that were added, changed, or removed. The table includes only the highest-level program elements &mdash; that is, if a class with two methods was added, the number of methods added does not include those two methods, but the number of classes added does include that class.");
             h_.writeText("</p>");
 
             emitNumbersByElement(apiDiff);
-            
-	    h_.writeText("</div><!-- end codesitecontent -->");
-            h_.writeText("<div style=\"padding-left: 10px; padding-right: 10px; margin-top: 0; padding-bottom: 15px;\">");
-            h_.writeText("  <table style=\"width: 100%; border: none;\"><tr>");
-            h_.writeText("    <td style=\"text-align:center;font-size: 10pt; border: none; color: ccc;\"> ");
-            h_.writeText("      <span>&copy;2008 Google - ");
-            h_.writeText("            <a href=\"http://code.google.com\">Code Home</a> - ");
-            h_.writeText("            <a href=\"http://www.google.com/accounts/TOS\">Site Terms of Sservice</a> - "); 
-            h_.writeText("            <a href=\"http://www.google.com/privacy.html\">Privacy Policy</a> ");
-            h_.writeText("      </span>");
-            h_.writeText("      <div style=\"xborder 1px solid red;position:relative;margin-top:-2em;" );
-            h_.writeText("        font-size:8pt;color:aaa;text-align:right;\">");
-            h_.writeText("        <em>Generated by <a href=\"http://www.jdiff.org/\">JDiff</a></em><br><img ");
-            h_.writeText("        align=\"right\" src=\"../../../assets/jdiff_logo.gif\">");
-            h_.writeText("      </span>");
-            h_.writeText("    </td>");
-            h_.writeText(" </tr></table>");
-            h_.writeText("</div>");
-            h_.writeText("</div><!-- end gc-containter -->");
 
-            h_.writeText("<script src=\"http://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
+            h_.writeText("<br>");
+            h_.writeText("<a name=\"packages\"></a>");
+            h_.writeText("<h2>Changed Packages, Sorted by Percentage Difference</h2>");
+            emitPackagesByDiff(apiDiff);
+            h_.writeText("<p style=\"font-size:10px\">* See <a href=\"#calculation\">Calculation of Change Percentages</a>, below.</p>");
+
+            h_.writeText("<br>");
+            h_.writeText("<a name=\"classes\"></a>");
+            h_.writeText("<h2>Changed Classes and <i>Interfaces</i>, Sorted by Percentage Difference</h2>");
+            emitClassesByDiff(apiDiff);
+            h_.writeText("<p style=\"font-size:10px\">* See <a href=\"#calculation\">Calculation of Change Percentages</a>, below.</p>");
+
+            h_.writeText("<br>");
+            h_.writeText("<h2 id=\"calculation\">Calculation of Change Percentages</h2>");
+            h_.writeText("<p>");
+            h_.writeText("The percent change statistic reported for all elements in the &quot;to&quot; API Level specification is defined recursively as follows:</p>");
+            h_.writeText("<pre>");
+            h_.writeText("Percentage difference = 100 * (added + removed + 2*changed)");
+            h_.writeText("                        -----------------------------------");
+            h_.writeText("                        sum of public elements in BOTH APIs");
+            h_.writeText("</pre>");
+            h_.writeText("<p>where <code>added</code> is the number of packages added, <code>removed</code> is the number of packages removed, and <code>changed</code> is the number of packages changed.");
+            h_.writeText("This definition is applied recursively for the classes and their program elements, so the value for a changed package will be less than 1, unless every class in that package has changed.");
+            h_.writeText("The definition ensures that if all packages are removed and all new packages are");
+            h_.writeText("added, the change will be 100%.</p>");
+
+            h_.writeText("      </div>	");
+            h_.writeText("      <div id=\"footer\">");
+            h_.writeText("        <div id=\"copyright\">");
+            h_.writeText("        Except as noted, this content is licensed under ");
+            h_.writeText("        <a href=\"https://creativecommons.org/licenses/by/2.5/\"> Creative Commons Attribution 2.5</a>.");
+            h_.writeText("        For details and restrictions, see the <a href=\"https://developer.android.com/license.html\">Content License</a>.");
+            h_.writeText("        </div>");
+            h_.writeText("      <div id=\"footerlinks\">");
+            h_.writeText("      <p>");
+            h_.writeText("        <a href=\"https://www.android.com/terms.html\">Site Terms of Service</a> -");
+            h_.writeText("        <a href=\"https://www.android.com/privacy.html\">Privacy Policy</a> -");
+            h_.writeText("        <a href=\"https://www.android.com/branding.html\">Brand Guidelines</a>");
+            h_.writeText("      </p>");
+            h_.writeText("    </div>");
+            h_.writeText("    </div> <!-- end footer -->");
+            h_.writeText("    </div><!-- end doc-content -->");
+            h_.writeText("    </div> <!-- end body-content --> ");
+
+            h_.writeText("<script src=\"https://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
             h_.writeText("</script>");
             h_.writeText("<script type=\"text/javascript\">");
             h_.writeText("  try {");
-            h_.writeText("    var pageTracker = _gat._getTracker(\"UA-18071-1\");");
+            h_.writeText("    var pageTracker = _gat._getTracker(\"UA-5831155-1\");");
             h_.writeText("    pageTracker._setAllowAnchor(true);");
             h_.writeText("    pageTracker._initData();");
             h_.writeText("    pageTracker._trackPageview();");
@@ -182,13 +190,13 @@ public class HTMLStatistics {
      * of the values.
      */
     public void emitPackagesByDiff(APIDiff apiDiff) {
-        
+
         Collections.sort(apiDiff.packagesChanged, new ComparePkgPdiffs());
 
         // Write out the table start
-        h_.writeText("<TABLE summary=\"Packages sorted by percentage difference\" BORDER=\"1\" WIDTH=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
-        h_.writeText("<TR WIDTH=\"20%\">");
-        h_.writeText("  <TH>Percentage<br>Difference</TH>");
+        h_.writeText("<TABLE summary=\"Packages sorted by percentage difference\" WIDTH=\"100%\">");
+        h_.writeText("<TR>");
+        h_.writeText("  <TH  WIDTH=\"10%\">Percentage Difference*</TH>");
         h_.writeText("  <TH>Package</TH>");
         h_.writeText("</TR>");
 
@@ -273,9 +281,9 @@ public class HTMLStatistics {
         Collections.sort(allChangedClasses, new CompareClassPdiffs());
 
         // Write out the table start
-        h_.writeText("<TABLE summary=\"Classes sorted by percentage difference\" BORDER=\"1\" WIDTH=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
+        h_.writeText("<TABLE summary=\"Classes sorted by percentage difference\" WIDTH=\"100%\">");
         h_.writeText("<TR WIDTH=\"20%\">");
-        h_.writeText("  <TH><b>Percentage<br>Difference</b></TH>");
+        h_.writeText("  <TH WIDTH=\"10%\">Percentage<br>Difference*</TH>");
         h_.writeText("  <TH><b>Class or <i>Interface</i></b></TH>");
         h_.writeText("</TR>");
 
@@ -389,32 +397,29 @@ public class HTMLStatistics {
                  numMethodsRemoved += classDiff.methodsRemoved.size();
                  numMethodsAdded += classDiff.methodsAdded.size();
                  numMethodsChanged += classDiff.methodsChanged.size();
-                 
+
                  numFieldsRemoved += classDiff.fieldsRemoved.size();
                  numFieldsAdded += classDiff.fieldsAdded.size();
                  numFieldsChanged += classDiff.fieldsChanged.size();
             }
         }
-        
+
         // Write out the table
-        h_.writeText("<TABLE summary=\"Number of differences\" BORDER=\"1\" WIDTH=\"100%\" cellspacing=\"0\" cellpadding=\"0\">");
+        h_.writeText("<TABLE summary=\"Number of differences\" WIDTH=\"100%\">");
         h_.writeText("<TR>");
-        h_.writeText("  <TH COLSPAN=5 NOWRAP>");
-        h_.writeText("  Number of Differences</TH>");
-        h_.writeText("</TR>");
-        h_.writeText("<TR>");
-        h_.writeText("  <TH>&nbsp;</TD>");
-        h_.writeText("  <TH ALIGN=\"center\"><b>Removals</b></TH>");
+        h_.writeText("  <th>Type</th>");
         h_.writeText("  <TH ALIGN=\"center\"><b>Additions</b></TH>");
         h_.writeText("  <TH ALIGN=\"center\"><b>Changes</b></TH>");
+        h_.writeText("  <TH ALIGN=\"center\">Removals</TH>");
         h_.writeText("  <TH ALIGN=\"center\"><b>Total</b></TH>");
         h_.writeText("</TR>");
 
         h_.writeText("<TR>");
         h_.writeText("  <TD>Packages</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numPackagesRemoved + "</TD>");
+
         h_.writeText("  <TD ALIGN=\"right\">" + numPackagesAdded + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numPackagesChanged + "</TD>");
+        h_.writeText("  <TD ALIGN=\"right\">" + numPackagesRemoved + "</TD>");
         int numPackages = numPackagesRemoved + numPackagesAdded + numPackagesChanged;
         h_.writeText("  <TD ALIGN=\"right\">" + numPackages + "</TD>");
         h_.writeText("</TR>");
@@ -425,9 +430,10 @@ public class HTMLStatistics {
 
         h_.writeText("<TR>");
         h_.writeText("  <TD>Classes and <i>Interfaces</i></TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numClassesRemoved + "</TD>");
+
         h_.writeText("  <TD ALIGN=\"right\">" + numClassesAdded + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numClassesChanged + "</TD>");
+        h_.writeText("  <TD ALIGN=\"right\">" + numClassesRemoved + "</TD>");
         int numClasses = numClassesRemoved + numClassesAdded + numClassesChanged;
         h_.writeText("  <TD ALIGN=\"right\">" + numClasses + "</TD>");
         h_.writeText("</TR>");
@@ -438,9 +444,9 @@ public class HTMLStatistics {
 
         h_.writeText("<TR>");
         h_.writeText("  <TD>Constructors</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numCtorsRemoved + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numCtorsAdded + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numCtorsChanged + "</TD>");
+        h_.writeText("  <TD ALIGN=\"right\">" + numCtorsRemoved + "</TD>");
         int numCtors = numCtorsRemoved + numCtorsAdded + numCtorsChanged;
         h_.writeText("  <TD ALIGN=\"right\">" + numCtors + "</TD>");
         h_.writeText("</TR>");
@@ -451,9 +457,9 @@ public class HTMLStatistics {
 
         h_.writeText("<TR>");
         h_.writeText("  <TD>Methods</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numMethodsRemoved + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numMethodsAdded + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numMethodsChanged + "</TD>");
+        h_.writeText("  <TD ALIGN=\"right\">" + numMethodsRemoved + "</TD>");
         int numMethods = numMethodsRemoved + numMethodsAdded + numMethodsChanged;
         h_.writeText("  <TD ALIGN=\"right\">" + numMethods + "</TD>");
         h_.writeText("</TR>");
@@ -464,9 +470,9 @@ public class HTMLStatistics {
 
         h_.writeText("<TR>");
         h_.writeText("  <TD>Fields</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numFieldsRemoved + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numFieldsAdded + "</TD>");
         h_.writeText("  <TD ALIGN=\"right\">" + numFieldsChanged + "</TD>");
+        h_.writeText("  <TD ALIGN=\"right\">" + numFieldsRemoved + "</TD>");
         int numFields = numFieldsRemoved + numFieldsAdded + numFieldsChanged;
         h_.writeText("  <TD ALIGN=\"right\">" + numFields + "</TD>");
         h_.writeText("</TR>");
@@ -476,12 +482,13 @@ public class HTMLStatistics {
         numChanged += numFieldsChanged;
 
         h_.writeText("<TR>");
-        h_.writeText("  <TD><b>Total</b></TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numRemoved + "</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numAdded + "</TD>");
-        h_.writeText("  <TD ALIGN=\"right\">" + numChanged + "</TD>");
+        h_.writeText("  <TD style=\"background-color:#FAFAFA\"><b>Total</b></TD>");
+
+        h_.writeText("  <TD  style=\"background-color:#FAFAFA\" ALIGN=\"right\"><strong>" + numAdded + "</strong></TD>");
+        h_.writeText("  <TD  style=\"background-color:#FAFAFA\" ALIGN=\"right\"><strong>" + numChanged + "</strong></TD>");
+        h_.writeText("  <TD  style=\"background-color:#FAFAFA\" ALIGN=\"right\"><strong>" + numRemoved + "</strong></TD>");
         int total = numRemoved + numAdded + numChanged;
-        h_.writeText("  <TD ALIGN=\"right\">" + total + "</TD>");
+        h_.writeText("  <TD  style=\"background-color:#FAFAFA\" ALIGN=\"right\"><strong>" + total + "</strong></TD>");
         h_.writeText("</TR>");
 
         h_.writeText("</TABLE>");
