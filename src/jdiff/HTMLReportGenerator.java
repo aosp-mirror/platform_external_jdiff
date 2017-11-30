@@ -734,6 +734,7 @@ public class HTMLReportGenerator {
     public void writeStyleSheetRef(boolean inSameDir) {
         if (inSameDir) {
             writeText("<link href=\"../../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<link href=\"../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
             writeText("<link href=\"stylesheet-jdiff.css\" rel=\"stylesheet\" type=\"text/css\" />");
             writeText("<noscript>");
             writeText("<style type=\"text/css\">");
@@ -749,6 +750,7 @@ public class HTMLReportGenerator {
             writeText("</style>");
 	    } else {
             writeText("<link href=\"../../../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
+            writeText("<link href=\"../../../assets/android-developer-docs.css\" rel=\"stylesheet\" type=\"text/css\" />");
             writeText("<link href=\"../stylesheet-jdiff.css\" rel=\"stylesheet\" type=\"text/css\" />");
             writeText("<noscript>");
             writeText("<style type=\"text/css\">");
