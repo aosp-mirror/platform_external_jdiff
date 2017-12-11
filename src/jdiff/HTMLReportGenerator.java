@@ -383,6 +383,10 @@ public class HTMLReportGenerator {
                 writeClassTableEntry(pkgName, className, 1, classAPI.isInterface_, classAPI.doc_, false);
             }
             writeTableEnd();
+            // Now emit a separate file for each added class and interface.
+            for (ClassAPI classApi : pkgDiff.classesAdded) {
+                reportAddedClass(pkgName, classApi);
+            }
         }
 
         // Report classes which were changed in the new API
@@ -426,6 +430,39 @@ public class HTMLReportGenerator {
         writeHTMLFooter();
         reportFile.close();
         reportFile = oldReportFile;
+    }
+
+    /**
+     * Write out a quick redirection file for added classes.
+     */
+    public void reportAddedClass(String pkgName, ClassAPI classApi) {
+        String className = classApi.name_;
+
+        String localReportFileName = reportFileName + JDiff.DIR_SEP + pkgName + "." + className
+                + reportFileExt;
+        if (outputDir != null)
+            localReportFileName = outputDir + JDiff.DIR_SEP + localReportFileName;
+
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(localReportFileName))) {
+            // Link to HTML file for the class
+            String classRef = pkgName + "." + className;
+            // Deal with inner classes
+            if (className.indexOf('.') != -1) {
+                classRef = pkgName + ".";
+                classRef = classRef.replace('.', '/');
+                classRef = newDocPrefix + classRef + className;
+            } else {
+                classRef = classRef.replace('.', '/');
+                classRef = newDocPrefix + classRef;
+            }
+
+            pw.write("<html><head><meta http-equiv=\"refresh\" content=\"0;URL='" + classRef
+                    + ".html'\" /></head></html>");
+        } catch(IOException e) {
+            System.out.println("IO Error while attempting to create " + localReportFileName);
+            System.out.println("Error: "+ e.getMessage());
+            System.exit(1);
+        }
     }
 
     /** 
