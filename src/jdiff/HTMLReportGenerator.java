@@ -184,11 +184,9 @@ public class HTMLReportGenerator {
     public void writeReport(APIDiff apiDiff) {
 
         // Report packages which were removed in the new API
-        if (apiDiff.packagesRemoved.size() != 0) {
+        if (!apiDiff.packagesRemoved.isEmpty()) {
             writeTableStart("Removed Packages", 2);
-            Iterator iter = apiDiff.packagesRemoved.iterator();
-            while (iter.hasNext()) {
-                PackageAPI pkgAPI = (PackageAPI)(iter.next());
+            for (PackageAPI pkgAPI : apiDiff.packagesRemoved) {
                 String pkgName = pkgAPI.name_;
                 if (trace) System.out.println("Package " + pkgName + " was removed.");
                 writePackageTableEntry(pkgName, 0, pkgAPI.doc_, false);
@@ -197,39 +195,36 @@ public class HTMLReportGenerator {
         }
         
         // Report packages which were added in the new API
-        if (apiDiff.packagesAdded.size() != 0) {
+        if (!apiDiff.packagesAdded.isEmpty()) {
             writeTableStart("Added Packages", 2);
-            Iterator iter = apiDiff.packagesAdded.iterator();
-            while (iter.hasNext()) {
-                PackageAPI pkgAPI = (PackageAPI)(iter.next());
+            for (PackageAPI pkgAPI : apiDiff.packagesAdded) {
                 String pkgName = pkgAPI.name_;
                 if (trace) System.out.println("Package " + pkgName + " was added.");
                 writePackageTableEntry(pkgName, 1, pkgAPI.doc_, false);
             }
             writeTableEnd();
+
+            // Now emit a separate file for each added package.
+            for (PackageAPI pkgAPI : apiDiff.packagesAdded) {
+                reportAddedPackage(pkgAPI);
+            }
         }
 
         // Report packages which were changed in the new API
-        if (apiDiff.packagesChanged.size() != 0) {
+        if (!apiDiff.packagesChanged.isEmpty()) {
             // Emit a table of changed packages, with links to the file
             // for each package.
             writeTableStart("Changed Packages", 3);
-            Iterator iter = apiDiff.packagesChanged.iterator();
-            while (iter.hasNext()) {
-                PackageDiff pkgDiff = (PackageDiff)(iter.next());
+            for (PackageDiff pkgDiff : apiDiff.packagesChanged) {
                 String pkgName = pkgDiff.name_;
                 if (trace) System.out.println("Package " + pkgName + " was changed.");
                 writePackageTableEntry(pkgName, 2, null, false);
             }
             writeTableEnd();
-            writeText("<!-- End of API section -->");
 
             // Now emit a separate file for each changed package.
-            writeText("<!-- Start of packages section -->");
-            PackageDiff[] pkgDiffs = new PackageDiff[apiDiff.packagesChanged.size()];
-            pkgDiffs = (PackageDiff[])apiDiff.packagesChanged.toArray(pkgDiffs);
-            for (int i = 0; i < pkgDiffs.length; i++) {
-                reportChangedPackage(pkgDiffs, i);
+            for (PackageDiff pkgDiff : apiDiff.packagesChanged) {
+                reportChangedPackage(pkgDiff);
             }
         }
             writeText("      </div>	");
@@ -251,13 +246,37 @@ public class HTMLReportGenerator {
             writeText("    </div> <!-- end body-content --> ");
     }
 
+    /**
+     * Write out a quick redirection file for added packages.
+     */
+    public void reportAddedPackage(PackageAPI pkgAPI) {
+        String pkgName = pkgAPI.name_;
 
+        String localReportFileName = reportFileName + JDiff.DIR_SEP + "pkg_" + pkgName
+                + reportFileExt;
+        if (outputDir != null)
+            localReportFileName = outputDir + JDiff.DIR_SEP + localReportFileName;
+
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(localReportFileName))) {
+            // Link to HTML file for the package
+            String pkgRef = newDocPrefix + pkgName.replace('.', '/');
+            pw.write("<html><head><meta http-equiv=\"refresh\" content=\"0;URL='" + pkgRef
+                    + "/package-summary.html'\" /></head></html>");
+        } catch(IOException e) {
+            System.out.println("IO Error while attempting to create " + localReportFileName);
+            System.out.println("Error: "+ e.getMessage());
+            System.exit(1);
+        }
+
+        for (ClassAPI classAPI : pkgAPI.classes_) {
+            reportAddedClass(pkgAPI.name_, classAPI);
+        }
+    }
 
     /**
      * Write out the details of a changed package in a separate file.
      */
-    public void reportChangedPackage(PackageDiff[] pkgDiffs, int pkgIndex) {
-        PackageDiff pkgDiff = pkgDiffs[pkgIndex];
+    public void reportChangedPackage(PackageDiff pkgDiff) {
         String pkgName = pkgDiff.name_;
 
         PrintWriter oldReportFile = null;
@@ -288,14 +307,7 @@ public class HTMLReportGenerator {
         // A link to the package in the new API
         String linkedPkgName = "<A HREF=\"" + pkgRef + ".html\" target=\"_top\"><font size=\"+1\"><code>" + pkgName + "</code></font></A>";
         String prevPkgRef = null;
-        if (pkgIndex != 0) {
-            prevPkgRef = "pkg_" + pkgDiffs[pkgIndex-1].name_ + reportFileExt;
-        }
-        // Create the HTML link to the next package
         String nextPkgRef = null;
-        if (pkgIndex < pkgDiffs.length - 1) {
-            nextPkgRef = "pkg_" + pkgDiffs[pkgIndex+1].name_ + reportFileExt;
-        }
 
         writeSectionHeader("Package " + linkedPkgName, pkgName, 
                            prevPkgRef, nextPkgRef,
