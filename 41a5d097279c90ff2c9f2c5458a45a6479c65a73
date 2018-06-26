@@ -1,0 +1,6 @@
+Code-Review+2: android-build-prod (mdb) <android-build-team-robot@google.com>
+Submitted-by: android-build-prod (mdb) <android-build-team-robot@google.com>
+Submitted-at: Tue, 26 Jun 2018 23:08:01 +0000
+Reviewed-on: https://android-review.googlesource.com/710204
+Project: platform/external/jdiff
+Branch: refs/heads/oreo-vts-release
