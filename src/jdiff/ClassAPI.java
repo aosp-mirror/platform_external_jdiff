@@ -13,7 +13,7 @@ import java.util.*;
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
-class ClassAPI implements Comparable {
+class ClassAPI implements Comparable<ClassAPI> {
 
     /** Name of the class, not fully qualified. */
     public String name_;
@@ -31,16 +31,16 @@ class ClassAPI implements Comparable {
     public String extends_; // Can only extend zero or one class or interface
 
     /** Interfaces implemented by this class. */
-    public List implements_; // String[]
+    public final List<String> implements_ = new ArrayList<>();
 
     /** Constructors in this class. */
-    public List ctors_; // ConstructorAPI[]
+    public final List<ConstructorAPI> ctors_ = new ArrayList<>();
 
     /** Methods in this class. */
-    public List methods_; // MethodAPI[]
+    public final List<MethodAPI> methods_ = new ArrayList<>();
 
     /** Fields in this class. */
-    public List fields_; //FieldAPI[]
+    public final List<FieldAPI> fields_ = new ArrayList<>();
 
     /** The doc block, default is null. */
     public String doc_ = null;
@@ -53,15 +53,10 @@ class ClassAPI implements Comparable {
         isInterface_ = isInterface;
         isAbstract_ = isAbstract;
         modifiers_ = modifiers;
-
-        implements_ = new ArrayList(); // String[]
-        ctors_ = new ArrayList(); // ConstructorAPI[]
-        methods_ = new ArrayList(); // MethodAPI[]
-        fields_ = new ArrayList(); // FieldAPI[]
     }
 
     /** Compare two ClassAPI objects by all the known information. */
-    public int compareTo(Object o) {
+    public int compareTo(ClassAPI o) {
         ClassAPI oClassAPI = (ClassAPI)o;
         int comp = name_.compareTo(oClassAPI.name_);
         if (comp != 0)
