@@ -14,11 +14,11 @@ import com.sun.javadoc.*;
 public class APIDiff {
 
     /** Packages added in the new API. */
-    public List packagesAdded = null; // PackageAPI[]
+    public final List<PackageAPI> packagesAdded = new ArrayList<>();
     /** Packages removed in the new API. */
-    public List packagesRemoved = null; // PackageAPI[]
+    public final List<PackageAPI> packagesRemoved = new ArrayList<>();
     /** Packages changed in the new API. */
-    public List packagesChanged = null; // PackageDiff[]
+    public final List<PackageDiff> packagesChanged = new ArrayList<>();
 
     /** Name of the old API. */
     public static String oldAPIName_;
@@ -32,9 +32,5 @@ public class APIDiff {
     public APIDiff() {
         oldAPIName_ = null;
         newAPIName_ = null;
-        packagesAdded = new ArrayList(); // PackageAPI[]
-        packagesRemoved = new ArrayList(); // PackageAPI[]
-        packagesChanged = new ArrayList(); // PackageDiff[]
     }   
 }
-

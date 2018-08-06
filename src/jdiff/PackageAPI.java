@@ -13,13 +13,13 @@ import java.util.*;
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
-class PackageAPI implements Comparable {
+class PackageAPI implements Comparable<PackageAPI> {
 
     /** Full qualified name of the package. */
     public String name_;
 
     /** Classes within this package. */
-    public List classes_;  // ClassAPI[]
+    public final List<ClassAPI> classes_ = new ArrayList<>();
 
     /** The doc block, default is null. */
     public String doc_ = null;
@@ -27,11 +27,10 @@ class PackageAPI implements Comparable {
     /** Constructor. */
     public PackageAPI(String name) {
         name_ = name;
-        classes_ = new ArrayList(); // ClassAPI[]
     }
 
     /** Compare two PackageAPI objects by name. */
-    public int compareTo(Object o) {
+    public int compareTo(PackageAPI o) {
         PackageAPI oPackageAPI = (PackageAPI)o;
         if (APIComparator.docChanged(doc_, oPackageAPI.doc_))
             return -1;
