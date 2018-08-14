@@ -13,7 +13,7 @@ import java.util.*;
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
-class ConstructorAPI implements Comparable {
+class ConstructorAPI implements Comparable<ConstructorAPI> {
     /**
      * Name of the constructor.
      * Either this or type_ must be non-null
@@ -58,7 +58,7 @@ class ConstructorAPI implements Comparable {
     }
 
     /** Compare two ConstructorAPI objects by type and modifiers. */
-    public int compareTo(Object o) {
+    public int compareTo(ConstructorAPI o) {
         ConstructorAPI constructorAPI = (ConstructorAPI)o;
         int comp = compareNullIsLeast(name_, constructorAPI.name_);
         if (comp != 0)
