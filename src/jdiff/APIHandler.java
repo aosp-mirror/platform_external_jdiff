@@ -170,6 +170,8 @@ class APIHandler extends DefaultHandler {
         } else if (inDoc) {
             // An element was found inside the HTML text
             addEndTagToText(localName);
+        } else if (currentElement == null) {
+            // No elements were found, nothing to do here
         } else if (currentElement.compareTo("constructor") == 0 &&
                    localName.compareTo("constructor") == 0) {
             currentElement = "class";
