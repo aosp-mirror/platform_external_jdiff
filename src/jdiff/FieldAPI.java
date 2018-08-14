@@ -13,7 +13,7 @@ import java.util.*;
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com
  */
-class FieldAPI implements Comparable {
+class FieldAPI implements Comparable<FieldAPI> {
     /** Name of the field. */
     public String name_;
 
@@ -67,7 +67,7 @@ class FieldAPI implements Comparable {
     }
 
     /** Compare two FieldAPI objects, including name, type and modifiers. */
-    public int compareTo(Object o) {
+    public int compareTo(FieldAPI o) {
         FieldAPI oFieldAPI = (FieldAPI)o;
         int comp = name_.compareTo(oFieldAPI.name_);
         if (comp != 0)
