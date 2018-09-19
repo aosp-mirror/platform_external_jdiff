@@ -1,0 +1,9 @@
+Code-Review+2: Colin Cross <ccross@android.com>
+Verified+1: Nan Zhang <nanzhang@google.com>
+Autosubmit+1: Nan Zhang <nanzhang@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 19 Sep 2018 03:02:17 +0000
+Reviewed-on: https://android-review.googlesource.com/758670
+Project: platform/external/jdiff
+Branch: refs/heads/master
