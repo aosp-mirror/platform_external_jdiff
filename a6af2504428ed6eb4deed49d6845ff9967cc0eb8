@@ -1,0 +1,9 @@
+Code-Review+2: Sergey Vasilinets <sergeyv@google.com>
+Code-Review+2: Alan Viverette <alanv@google.com>
+Autosubmit+1: Chris Banes <chrisbanes@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 13 Feb 2019 18:08:42 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/jdiff/+/903174
+Project: platform/external/jdiff
+Branch: refs/heads/master
