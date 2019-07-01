@@ -818,16 +818,6 @@ public class HTMLReportGenerator {
 
     /** Write the HTML footer. */
     public void writeHTMLFooter() {
-        writeText("<script src=\"https://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
-        writeText("</script>");
-        writeText("<script type=\"text/javascript\">");
-        writeText("  try {");
-        writeText("    var pageTracker = _gat._getTracker(\"UA-5831155-1\");");
-        writeText("    pageTracker._setAllowAnchor(true);");
-        writeText("    pageTracker._initData();");
-        writeText("    pageTracker._trackPageview();");
-        writeText("  } catch(e) {}");
-        writeText("</script>");
         writeText("</BODY>");
         writeText("</HTML>");
     }
