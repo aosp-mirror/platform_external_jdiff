@@ -164,18 +164,6 @@ public class HTMLStatistics {
             h_.writeText("    </div> <!-- end footer -->");
             h_.writeText("    </div><!-- end doc-content -->");
             h_.writeText("    </div> <!-- end body-content --> ");
-
-            h_.writeText("<script src=\"https://www.google-analytics.com/ga.js\" type=\"text/javascript\">");
-            h_.writeText("</script>");
-            h_.writeText("<script type=\"text/javascript\">");
-            h_.writeText("  try {");
-            h_.writeText("    var pageTracker = _gat._getTracker(\"UA-5831155-1\");");
-            h_.writeText("    pageTracker._setAllowAnchor(true);");
-            h_.writeText("    pageTracker._initData();");
-            h_.writeText("    pageTracker._trackPageview();");
-            h_.writeText("  } catch(e) {}");
-            h_.writeText("</script>");
-
             h_.writeText("</BODY></HTML>");
             h_.reportFile.close();
         } catch(IOException e) {
