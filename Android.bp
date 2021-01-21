@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+package {
+    default_applicable_licenses: ["external_jdiff_license"],
+}
+
+license {
+    name: "external_jdiff_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-Apache-2.0","SPDX-license-identifier-CC-BY","SPDX-license-identifier-GPL","SPDX-license-identifier-LGPL","SPDX-license-identifier-LGPL-2.1","SPDX-license-identifier-LGPL-3.0"],
+    license_text: ["NOTICE"],
+}
+
 java_library_host {
     name: "jdiff",
     srcs: ["**/*.java"],
