@@ -46,11 +46,12 @@ license {
     ],
 }
 
-// b/246303954: jdiff is excluded from build until it is migrated to Java 17, or
-// replaced by another tool
-// java_library_host {
-//     name: "jdiff",
-//     srcs: ["**/*.java"],
-//
-//     use_tools_jar: true,
-// }
+ java_library_host {
+     name: "jdiff",
+     srcs: ["**/*.java"],
+     static_libs: [
+         "doclava-doclet-adapter",
+     ],
+
+     use_tools_jar: true,
+ }
