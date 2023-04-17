@@ -67,10 +67,10 @@ class CommentsHandler extends DefaultHandler {
                 System.exit(3);
             }
             // Check the given names against the names of the APIs
-            int idx1 = JDiff.oldFileName.lastIndexOf('.');
-            int idx2 = JDiff.newFileName.lastIndexOf('.');
-            String filename2 = JDiff.oldFileName.substring(0, idx1) + 
-                "_to_" + JDiff.newFileName.substring(0, idx2);
+            int idx1 = Options.oldFileName.lastIndexOf('.');
+            int idx2 = Options.newFileName.lastIndexOf('.');
+            String filename2 = Options.oldFileName.substring(0, idx1) + 
+                "_to_" + Options.newFileName.substring(0, idx2);
             if (filename2.compareTo(commentsName) != 0) {
                 System.out.println("Warning: API identifier in the comments XML file (" + filename2 + ") differs from the name of the file.");
             }
