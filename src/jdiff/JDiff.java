@@ -1,12 +1,19 @@
 package jdiff;
 
-import com.sun.javadoc.*;
-
-import java.util.*;
+import com.google.doclava.javadoc.RootDocImpl;
+import com.sun.javadoc.DocErrorReporter;
+import com.sun.javadoc.RootDoc;
 import java.io.*;
-import java.lang.reflect.*; // Used for invoking Javadoc indirectly
-import java.lang.Runtime;
 import java.lang.Process;
+import java.lang.Runtime;
+import java.lang.reflect.*; // Used for invoking Javadoc indirectly
+import java.util.*;
+import java.util.HashSet;
+import javax.lang.model.SourceVersion;
+import javax.tools.Diagnostic.Kind;
+import jdk.javadoc.doclet.Doclet;
+import jdk.javadoc.doclet.DocletEnvironment;
+import jdk.javadoc.doclet.Reporter;
 
 /**
  * Generates HTML describing the changes between two sets of Java source code.
@@ -14,11 +21,44 @@ import java.lang.Process;
  * See the file LICENSE.txt for copyright details.
  * @author Matthew Doar, mdoar@pobox.com.
  */
-public class JDiff extends Doclet {
+public class JDiff implements Doclet {
 
-    public static LanguageVersion languageVersion(){
-      return LanguageVersion.JAVA_1_5;
-    } 
+    public static Reporter reporter;
+
+    @Override
+    public void init(Locale locale, Reporter reporter) {
+        JDiff.reporter = reporter;
+    }
+
+    @Override
+    public String getName() {
+        return "JDiff";
+    }
+
+    @Override
+    public Set<? extends Option> getSupportedOptions() {
+        return Options.getSupportedOptions();
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.RELEASE_5;
+    }
+
+    @Override
+    public boolean run(DocletEnvironment environment) {
+        if (!Options.writeXML && !Options.compareAPIs) {
+            JDiff.reporter.print(Kind.ERROR,
+                    "First use the -apiname option to generate an XML file for one API.");
+            JDiff.reporter.print(Kind.ERROR,
+                    "Then use the -apiname option again to generate another XML file for a different version of the API.");
+            JDiff.reporter.print(Kind.ERROR,
+                    "Finally use the -oldapi option and -newapi option to generate a report about how the APIs differ.");
+            return false;
+        }
+        return start(new RootDocImpl(environment));
+    }
+
     /**
      * Doclet-mandated start method. Everything begins here.
      *
@@ -43,19 +83,19 @@ public class JDiff extends Doclet {
 
         // Open the file where the XML representing the API will be stored.
         // and generate the XML for the API into it.
-        if (writeXML) {
-            RootDocToXML.writeXML(newRoot);           
+        if (Options.writeXML) {
+            RootDocToXML.writeXML(newRoot);
         }
 
-        if (compareAPIs) {
-	    String tempOldFileName = oldFileName;
-	    if (oldDirectory != null) {
-		tempOldFileName = oldDirectory;
-		if (!tempOldFileName.endsWith(JDiff.DIR_SEP)) {
-		    tempOldFileName += JDiff.DIR_SEP;
-		}
-		tempOldFileName += oldFileName;
-	    }
+        if (Options.compareAPIs) {
+        String tempOldFileName = Options.oldFileName;
+        if (Options.oldDirectory != null) {
+        tempOldFileName = Options.oldDirectory;
+        if (!tempOldFileName.endsWith(JDiff.DIR_SEP)) {
+            tempOldFileName += JDiff.DIR_SEP;
+        }
+        tempOldFileName += Options.oldFileName;
+        }
 
             // Check the file for the old API exists
             File f = new File(tempOldFileName);
@@ -65,13 +105,13 @@ public class JDiff extends Doclet {
             }
             // Check the file for the new API exists
 
-	    String tempNewFileName = newFileName;
-            if (newDirectory != null) {
-		tempNewFileName = newDirectory;
-		if (!tempNewFileName.endsWith(JDiff.DIR_SEP)) {
-		    tempNewFileName += JDiff.DIR_SEP;
-		}
-		tempNewFileName += newFileName;
+        String tempNewFileName = Options.newFileName;
+            if (Options.newDirectory != null) {
+        tempNewFileName = Options.newDirectory;
+        if (!tempNewFileName.endsWith(JDiff.DIR_SEP)) {
+            tempNewFileName += JDiff.DIR_SEP;
+        }
+        tempNewFileName += Options.newFileName;
             }
             f = new File(tempNewFileName);
             if (!f.exists()) {
@@ -83,26 +123,26 @@ public class JDiff extends Doclet {
             // and create an API object for it.
             System.out.print("JDiff: reading the old API in from file '" + tempOldFileName + "'...");
             // Read the file in, but do not add any text to the global comments
-            API oldAPI = XMLToAPI.readFile(tempOldFileName, false, oldFileName);
-            
+            API oldAPI = XMLToAPI.readFile(tempOldFileName, false, Options.oldFileName);
+
             // Read the file where the XML representing the new API is stored
             // and create an API object for it.
             System.out.print("JDiff: reading the new API in from file '" + tempNewFileName + "'...");
             // Read the file in, and do add any text to the global comments
-            API newAPI = XMLToAPI.readFile(tempNewFileName, true, newFileName);
-            
+            API newAPI = XMLToAPI.readFile(tempNewFileName, true, Options.newFileName);
+
             // Compare the old and new APIs.
             APIComparator comp = new APIComparator();
-            
+
             comp.compareAPIs(oldAPI, newAPI);
-            
+
             // Read the file where the XML for comments about the changes between
-            // the old API and new API is stored and create a Comments object for 
+            // the old API and new API is stored and create a Comments object for
             // it. The Comments object may be null if no file exists.
-            int suffix = oldFileName.lastIndexOf('.');
-            String commentsFileName = "user_comments_for_" + oldFileName.substring(0, suffix);
-            suffix = newFileName.lastIndexOf('.');
-            commentsFileName += "_to_" + newFileName.substring(0, suffix) + ".xml";
+            int suffix = Options.oldFileName.lastIndexOf('.');
+            String commentsFileName = "user_comments_for_" + Options.oldFileName.substring(0, suffix);
+            suffix = Options.newFileName.lastIndexOf('.');
+            commentsFileName += "_to_" + Options.newFileName.substring(0, suffix) + ".xml";
             commentsFileName = commentsFileName.replace(' ', '_');
                 if (HTMLReportGenerator.commentsDir !=null) {
                   commentsFileName = HTMLReportGenerator.commentsDir + DIR_SEP + commentsFileName;
@@ -113,16 +153,16 @@ public class JDiff extends Doclet {
             Comments existingComments = Comments.readFile(commentsFileName);
             if (existingComments == null)
                 System.out.println(" (the comments file will be created)");
-            
+
             // Generate an HTML report which summarises all the API differences.
             HTMLReportGenerator reporter = new HTMLReportGenerator();
             reporter.generate(comp, existingComments);
-            
+
             // Emit messages about which comments are now unused and
             // which are new.
             Comments newComments = reporter.getNewComments();
             Comments.noteDifferences(existingComments, newComments);
-            
+
             // Write the new comments out to the same file, with unused comments
             // now commented out.
             System.out.println("JDiff: writing the comments out to file '" + commentsFileName + "'...");
@@ -130,46 +170,16 @@ public class JDiff extends Doclet {
         }
 
         System.out.print("JDiff: finished (took " + (System.currentTimeMillis() - startTime)/1000 + "s");
-        if (writeXML)
-            System.out.println(", not including scanning the source files)."); 
-        else if (compareAPIs)
+        if (Options.writeXML)
+            System.out.println(", not including scanning the source files).");
+        else if (Options.compareAPIs)
             System.out.println(").");
        return true;
     }
 
-//
-// Option processing
-// 
-
     /**
-     * This method is called by Javadoc to
-     * parse the options it does not recognize. It then calls
-     * {@link #validOptions} to validate them.
-     *
-     * @param option  a String containing an option
-     * @return an int telling how many components that option has
-     */
-    public static int optionLength(String option) {
-        return Options.optionLength(option);
-    }
-
-    /**
-     * After parsing the available options using {@link #optionLength},
-     * Javadoc invokes this method with an array of options-arrays.
-     *
-     * @param options   an array of String arrays, one per option
-     * @param reporter  a DocErrorReporter for generating error messages
-     * @return true if no errors were found, and all options are
-     *         valid
-     */
-    public static boolean validOptions(String[][] options, 
-                                       DocErrorReporter reporter) {
-        return Options.validOptions(options, reporter);
-    }
-    
-    /** 
      * This method is only called when running JDiff as a standalone
-     * application, and uses ANT to execute the build configuration in the 
+     * application, and uses ANT to execute the build configuration in the
      * XML configuration file passed in.
      */
     public static void main(String[] args) {
@@ -190,7 +200,7 @@ public class JDiff extends Doclet {
         return;
     }
 
-    /** 
+    /**
      * Display usage information for JDiff.
      */
     public static void showUsage() {
@@ -198,8 +208,8 @@ public class JDiff extends Doclet {
         System.out.println("If no build file is specified, the local build.xml file is used.");
     }
 
-    /** 
-     * Invoke ANT by reflection. 
+    /**
+     * Invoke ANT by reflection.
      *
      * @return The integer return code from running ANT.
      */
@@ -239,36 +249,6 @@ public class JDiff extends Doclet {
         System.gc(); // Clean up after running ANT
         return -1;
     }
-
-    /** 
-     * The name of the file where the XML representing the old API is
-     * stored. 
-     */
-    static String oldFileName = "old_java.xml";
-
-    /** 
-     * The name of the directory where the XML representing the old API is
-     * stored. 
-     */
-    static String oldDirectory = null;
-
-    /** 
-     * The name of the file where the XML representing the new API is 
-     * stored. 
-     */
-    static String newFileName = "new_java.xml";
-
-    /** 
-     * The name of the directory where the XML representing the new API is 
-     * stored. 
-     */
-    static String newDirectory = null;
-
-    /** If set, then generate the XML for an API and exit. */
-    static boolean writeXML = false;
-
-    /** If set, then read in two XML files and compare their APIs. */
-    static boolean compareAPIs = false;
 
     /**
      * The file separator for the local filesystem, forward or backward slash.
