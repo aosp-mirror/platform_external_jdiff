@@ -214,9 +214,10 @@ public class RootDocToXML {
      * out as XML comments.
      */
     public void logOptions() {
-        outputFile.print("<!-- ");
-        outputFile.print(" Command line arguments = " + Options.cmdOptions);
-        outputFile.println(" -->");
+        // TODO: Get options from javadoc if possible.
+        // outputFile.print("<!-- ");
+        // outputFile.print(" Command line arguments = " + Options.cmdOptions);
+        // outputFile.println(" -->");
     }
 
     /**
