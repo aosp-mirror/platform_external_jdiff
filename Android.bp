@@ -46,9 +46,12 @@ license {
     ],
 }
 
-java_library_host {
-    name: "jdiff",
-    srcs: ["**/*.java"],
+ java_library_host {
+     name: "jdiff",
+     srcs: ["**/*.java"],
+     static_libs: [
+         "doclava-doclet-adapter",
+     ],
 
-    use_tools_jar: true,
-}
+     use_tools_jar: true,
+ }
